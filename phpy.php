@@ -122,6 +122,9 @@ class phpy {
     if ( $action_data['back'] ) {
       die(header('Location: ' . $_SERVER['HTTP_REFERER']));
     }
+    else if ( $action_data['go'] ) {
+      die(header('Location: ' . $action_data['go']));
+    }
     
     self::render($action, $action_data);
   }
