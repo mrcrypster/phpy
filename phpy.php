@@ -1,131 +1,151 @@
 <?php
 
-class phpy {
-  private static $app_path;
-  private static $com_path;
+
+# --- Wrappers ---
+
+function phpy(...$args) {
+  $root = $args[0];
+  phpy::launch($root);
   
-  /**
-   * Run application
-   */
-  public static function run($app_path) {
-    ob_start();
+}
+
+
+
+# --- Implementation ---
+
+class phpy {
+  
+  # --- configuration ---
+  
+  private static $root;
+  
+  
+  
+  
+  # --- core implementation ---
+  
+  # Launch PHPu app, specify "public" folder full path as $root
+  public static function launch($root) {
+    self::$root = dirname($root);
     
-    self::$app_path = $app_path;
-    self::$com_path = dirname(realpath($app_path)) . '/com';
-    
-    $data = [
-      'content_type' => 'html'
-    ];
-    
-    
-    # Run top level index handler, if declared
-    $index_action_file = $app_path . '/' . 'index.php';
-    if ( is_file($index_action_file) ) {
-      $index_data = include $index_action_file;
-      if ( is_array($index_data) ) {
-        foreach ( $index_data as $k => $v ) {
-          $data[$k] = $v;
-        }
-      }
-    }
-    
-    
-    # Run action handler, based on URI
-    /*$action = str_replace('.', '_', trim(parse_url($_SERVER['REQUEST_URI'])['path'], '/'));
-    if ( $action ) {
-      $action_data = self::action($action);
-      
-      if ( ($_SERVER['REQUEST_METHOD'] == 'POST') || $action_data['back'] ) {
-        die(header('Location: ' . $_SERVER['HTTP_REFERER']));
-      }
-      
-      # Merge top-level and action data
-      if ( $action_data ) {
-        foreach ( $action_data as $k => $v ) {
-          $data[$k] = $v;
-        }
-      }
-    }*/
-    
-    
-    # Render data
-    self::render('index', $data);
-    
-    ob_flush();
+    header('Content-type: text/html;charset=utf-8');
+    $output = self::com('layout');
+    echo implode('', $output);
   }
   
-  
-  /**
-   * Execute action handler
-   */
-  public static function action($action) {
-    $action_data = null;
-    
-    foreach ( [self::$app_path, self::$com_path] as $path ) {
-      $action_file = $path . '/' . $action . '.php';
-      if ( is_file($action_file) ) {
-        $action_data = include $action_file;
+  # Execute component by $path
+  public static function com($path, $args = []) {
+    $file = self::$root . '/coms/' . $path . '.php';
+    if ( is_file($file) ) {
+      $data = include $file;
+      return self::exec($data);
+    }
+    else {
+      $class = $path . '_com_phpy';
+      if ( class_exists($class) ) {
+        $output = self::exec( call_user_func($class . '::exec', $args) );
+        return implode('', $output);
       }
       else {
-        $action_file = $path . '/' . $action . '/index.php';
-        if ( is_file($action_file) ) {
-          $action_data = include $action_file;
-        }
+        return self::default_com([$path => $args]);
       }
-    }
-    
-    return is_array($action_data) ? $action_data : null;
-  }
-  
-  /**
-   * Render view with specified data
-   */
-  public static function render($view, $data = []) {
-    foreach ( [self::$app_path, self::$com_path] as $path ) {
-      $view_file = $path . '/' . $view . '.html.php';
-      if ( !is_file($view_file) ) {
-        $view_file = $path . '/' . $view . '/index.html.php';
-      }
-      
-      if ( !is_file($view_file) ) {
-        continue;
-      }
-      
-      if ( $data ) {
-        foreach ( $data as $k => $v ) $$k = $v;
-      
-        if ( $data['content_type'] == 'html' ) {
-          header('Content-type: text/html;charset=utf-8');
-        }
-      }
-      
-      include $view_file;
     }
   }
   
+  # Execute component by data
+  public static function exec($data) {
+    
+    if ( !is_array($data) ) return [$data];
+    
+    $output = [];
+    foreach ( $data as $k => $sub_data ) {
+      if ( is_numeric($k) ) {
+        foreach ( self::exec($sub_data) as $o ) {
+          $output[] = $o;
+        }
+      }
+      else {
+        $output[] = self::com($k, $sub_data);
+      }
+    }
+    return $output;
+  }
   
-  /**
-   * Run and render isolated component
-   */
-  public static function com($uri = null) {
-    if ( is_null($uri) ) {
-      $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
+  # Default component handler
+  public static function default_com($data) {
+    if ( is_string($data) ) {
+      return htmlspecialchars($data);
+    }
+    else {
+      $output = '';
+      foreach ( $data as $tag => $params ) {
+        list($attrs, $data) = self::params($params);
+        $attr_str = [];
+        foreach ( $attrs as $k => $v ) {
+          $attr_str[] = $k . '="' . htmlspecialchars($v) . '"';
+        }
+        
+        $inner = [];
+        if ( is_array($data) ) {
+          foreach ( $data as $k => $v ) {
+            foreach ( self::exec([$k => $v]) as $i ) {
+              $inner[] = $i;
+            }
+          }
+        }
+        else {
+          $inner[] = self::default_com($data);
+        }
+        
+        $output .= '<' . $tag . ( $attr_str ? ' ' . implode(' ', $attr_str) : '') . '>' . implode('', $inner). '</' . $tag . '>';
+      }
+      
+      return $output;
+    }
+  }
+  
+  # Parse params and split into 2 maps: attrs and other data
+  public static function params($params) {
+    if ( !is_array($params) ) return [[], $params];
+    
+    $attr_names = ['href', 'id', 'class', 'value', 'placeholder', 'src'];
+    
+    $attrs = $data = [];
+    foreach ( $params as $k => $v ) {
+      if ( !is_numeric($k) && in_array($k, $attr_names) ) {
+        $attrs[$k] = $v;
+      }
+      else {
+        $data[$k] = $v;
+      }
     }
     
-    $action = str_replace('.', '_', trim($uri, '/'));
-    if ( !$action ) {
-      $action = 'default';
-    }
-    
-    $action_data = self::action($action);
-    
-    if ( $action_data['back'] ) {
-      die(header('Location: ' . $_SERVER['HTTP_REFERER']));
-    }
-    else if ( $action_data['go'] ) {
-      die(header('Location: ' . $action_data['go']));
-    }
-    
-    self::render($action, $action_data);
+    return [$attrs, $data];
+  }
+}
+
+
+
+# --- Built-in components
+class htm_com_phpy {
+  public static function exec($data) {
+    return [
+      ['raw' => '<!DOCTYPE html>'],
+      'html' => [
+        'head' => [
+          'title' => 'Hi!',
+          'raw' => '<meta name="viewport" content="width=device-width, initial-scale=1.0">' .
+                   '<link rel="stylesheet" href="/styles.css">'
+        ],
+        'body' => $data,
+        'script' => ['src' => '/script.js']
+      ],
+    ];
+  }
+}
+
+class raw_com_phpy {
+  public static function exec($data) {
+    return $data;
   }
 }
