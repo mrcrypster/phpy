@@ -6,7 +6,7 @@ echo 'Building files...' . "\n";
 
 file_put_contents(__DIR__ . '/build/phpy.php',
                    file_get_contents(__DIR__ . '/src/core.php') . "\n" .
-                   file_get_contents(__DIR__ . '/src/utilities.php')
+                   str_replace('<?php', '', file_get_contents(__DIR__ . '/src/utilities.php'))
                  );
                  
 file_put_contents(__DIR__ . '/build/phpy.js',

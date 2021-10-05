@@ -305,7 +305,7 @@ class phpy {
     return $css;
   }
 }
-<?php
+
 
 # Utility functions and helpers
 
