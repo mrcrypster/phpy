@@ -143,12 +143,12 @@ class phpy {
   # render transformers+
   public static function transform_layout($data) {
     $scripts = ['script' => ['attrs' => ['src' => '/client.js']]];
-    foreach ( $data['scripts'] as $url ) if ( $url ) {
+    if ( $data['scripts'] ) foreach ( $data['scripts'] as $url ) if ( $url ) {
       $scripts[] = ['script' => ['attrs' => ['src' => $url]]];
     }
     
     $styles = [ 'link' => ['attrs' => ['rel' => 'stylesheet', 'href' => '/ui.css']] ];
-    foreach ( $data['styles'] as $url ) if ( $url ) {
+    if ( $data['styles'] ) foreach ( $data['styles'] as $url ) if ( $url ) {
       $styles[] = [ 'link' => ['attrs' => ['rel' => 'stylesheet', 'href' => $url]] ];
     }
     
