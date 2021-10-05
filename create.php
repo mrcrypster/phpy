@@ -9,6 +9,8 @@ if ( !$path = $argv[1] ) {
 $path = realpath($path);
 @mkdir($path);
 
+echo 'Creating new project in "' . $path . '"...' . "\n";
+
 mkdir($path . '/web');
 file_put_contents($path . '/web/index.php',
   '<?php' . "\n\n" . 
@@ -24,3 +26,5 @@ file_put_contents($path . '/com/layout/index.php',
   "  ['html' => 'Hi there!']" . "\n" .
   "];" . "\n"
 );
+
+echo 'Done' . "\n";
