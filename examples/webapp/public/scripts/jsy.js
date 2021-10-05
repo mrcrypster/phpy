@@ -2,4 +2,6 @@ var q = function(sel) {
   return document.querySelectorAll(sel);
 }
 
-console.log(q);
+function d(id) {
+  console.log(id);
+}

@@ -1,0 +1,15 @@
+/* Styles reset and skeleton for PHPy */
+
+
+
+/* Reset */
+* {
+  margin: 0; padding: 0; border: 0;
+}
+
+
+
+/* System classes */
+.loading {
+  opacity: 0.5;
+}
