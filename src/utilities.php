@@ -17,7 +17,12 @@ function endpoint() {
 
 # redirect to another url
 function go($url) {
-  die(header('Location: ' . $url));
+  if ( $_POST ) {
+    header('Xlocation: ' . $url);
+  }
+  else {
+    die(header('Location: ' . $url));
+  }
 }
 
 
