@@ -23,7 +23,7 @@ mkdir($path . '/com');
 mkdir($path . '/com/layout');
 file_put_contents($path . '/com/layout/index.php',
   '<?php return [' . "\n" . 
-  "  ['html' => 'Hi there!']" . "\n" .
+  "  ['layout' => ['html' => 'Hi there!']]" . "\n" .
   "];" . "\n"
 );
 
