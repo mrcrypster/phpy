@@ -11,7 +11,9 @@ class phpy {
     'route' => [
       '*.css' => 'css',
       '*.js' => 'js'
-    ]
+    ],
+    
+    'login' => '/login'
   ];
   public static function config($params) {
     foreach ( $params as $k => $v ) self::$config[$k] = $v;
@@ -40,6 +42,8 @@ class phpy {
     # laucnher & configuration handler
     if ( (count($args) == 1) && is_array($args[0]) && is_array($args[0]['config']) ) {
       self::config($args[0]['config']);
+      
+      self::control_access();
       
       if ( $_POST['com'] ) {
         header('Content-type: application/json');
@@ -92,6 +96,36 @@ class phpy {
       }
       
       return self::render($data);
+    }
+  }
+  
+  
+  
+  # access control
+  public static function control_access() {
+    if ( $acl = self::$config['acl'] ) {
+      $allowed = true;
+      
+      if ( $acl['private'] ) {
+        if ( preg_match($acl['private'], endpoint()) ) {
+          $allowed = false;
+        }
+      }
+      
+      if ( $acl['public'] ) {
+        if ( preg_match($acl['public'], endpoint()) ) {
+          $allowed = true;
+        }
+      }
+    }
+    
+    if ( !$allowed ) {
+      
+      if ( endpoint() != self::$config['login'] ) {
+        go(self::$config['login']);
+      }
+      
+      die(header('HTTP/1.0 403 Forbidden'));
     }
   }
   
