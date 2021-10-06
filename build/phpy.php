@@ -108,7 +108,9 @@ class phpy {
     if ( $acl = self::$config['acl'] ) {
       if ( $acl['private'] ) {
         if ( preg_match($acl['private'], endpoint()) ) {
-          $allowed = false;
+          if ( !session('id') ) {
+            $allowed = false;
+          }
         }
       }
       
