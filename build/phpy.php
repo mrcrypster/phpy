@@ -268,6 +268,9 @@ class phpy {
             foreach ( $inner['attrs'] as $n => $v ) {
               $attrs .= ' ' . $n . '="' . htmlspecialchars($v) . '"';
             }
+          }
+          
+          if ( is_array($inner) ) {
             unset($inner['attrs']);
           }
           
