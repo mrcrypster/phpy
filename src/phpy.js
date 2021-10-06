@@ -16,14 +16,14 @@ function com(selector, com_path, data, callback) {
     data = {value: data};
   }
   
-  data.com = com_path;
-  
   add_cls(selector, 'loading');
   
   if ( data instanceof HTMLFormElement ) {
     data = new FormData(data);
+    data.append('com', com_path);
   }
   else {
+    data.com = com_path;
     data = new URLSearchParams(data);
   }
   
