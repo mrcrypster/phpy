@@ -103,9 +103,9 @@ class phpy {
   
   # access control
   public static function control_access() {
+    $allowed = true;
+    
     if ( $acl = self::$config['acl'] ) {
-      $allowed = true;
-      
       if ( $acl['private'] ) {
         if ( preg_match($acl['private'], endpoint()) ) {
           $allowed = false;
