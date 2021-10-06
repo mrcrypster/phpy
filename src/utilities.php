@@ -11,7 +11,7 @@ function phpy() {
 
 # return current endpoint (URI path)
 function endpoint() {
-  return parse_url($_SERVER['REQUEST_URI'])['path'];
+  return $_POST['com'] ?: parse_url($_SERVER['REQUEST_URI'])['path'];
 }
 
 
