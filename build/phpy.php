@@ -51,7 +51,7 @@ class phpy {
       }
       else {
         header('Content-type: text/html;charset=utf8');
-        echo phpy('/layout');
+        echo '<html>' . phpy('/layout') . '</html>';
       }
     }
     
