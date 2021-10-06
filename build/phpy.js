@@ -20,10 +20,17 @@ function com(selector, com_path, data, callback) {
   
   add_cls(selector, 'loading');
   
+  if ( data instanceof HTMLFormElement ) {
+    data = new FormData(data);
+  }
+  else {
+    data = new URLSearchParams(data);
+  }
+  
   fetch('/', {
     signal: fetch_controllers[selector].signal,
     method: 'post',
-    body: new URLSearchParams(data)
+    body: data
   }).then(function(r) {
     return r.json();
   }).then(function(r) {
