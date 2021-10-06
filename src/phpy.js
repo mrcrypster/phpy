@@ -32,6 +32,8 @@ function com(selector, com_path, data, callback) {
     method: 'post',
     body: data
   }).then(function(r) {
+    console.log(r.headers);
+    console.log(r.headers.get('Xlocation'));
     return r.json();
   }).then(function(r) {
     remove_cls(selector, 'loading');
