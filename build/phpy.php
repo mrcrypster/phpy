@@ -230,7 +230,10 @@ class phpy {
     }
     
     foreach ( $array as $tag => $inner ) {
-      if ( is_numeric($tag) ) {
+      if ( $tag == 'html' ) {
+        $html .= self::render_tags($inner);
+      }
+      else if ( is_numeric($tag) ) {
         $html .= self::render_tags($inner);
       }
       else {
