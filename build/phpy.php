@@ -375,6 +375,16 @@ function go($url) {
 }
 
 
+# redirect to another url, but only if second argument is true
+function go_if($url, $condition) {
+  if ( !$condition ) {
+    return;
+  }
+  
+  go($url);
+}
+
+
 # true if is this a first call for this flag
 function am_i_first($flag) {
   static $calls = [];
