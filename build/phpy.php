@@ -253,7 +253,7 @@ class phpy {
             }
             
             $inner['attrs']['class'] = ($inner['attrs']['class'] ? $inner['attrs']['class'] . ' ' : '') .
-                                       explode('.', $tag)[1];
+                                       str_replace('.', ' ', substr($tag, strpos($tag, '.') + 1));
             $tag = explode('.', $tag)[0] ?: 'div';
           }
           
