@@ -436,6 +436,11 @@ function h($txt) {
   return htmlspecialchars($txt);
 }
 
+# short alias for url encoding
+function u($txt) {
+  return urlencode($txt);
+}
+
 
 # simple session get/set with lazy-load
 

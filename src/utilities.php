@@ -86,3 +86,8 @@ function url($params = []) {
 function h($txt) {
   return htmlspecialchars($txt);
 }
+
+# short alias for url encoding
+function u($txt) {
+  return urlencode($txt);
+}
