@@ -289,7 +289,7 @@ class phpy {
   # automatic path handlers
   public static function route_path($path) {
     foreach ( self::$config['route'] as $pattern => $type ) {
-      if ( preg_match('/' . str_replace('*', '.+', $pattern) . '/', $path) ) {
+      if ( preg_match('/' . str_replace('*', '.+', $pattern) . '$/', $path) ) {
         echo self::{'route_' . $type}($path);
         exit;
       }
