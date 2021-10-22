@@ -54,7 +54,7 @@ function com(selector, com_path, data, callback) {
 // query selector all wrapper
 function qs(selector, parent) {
   parent = parent || document;
-  return parent.querySelectorAll(selector);
+  return typeof selector != 'string' ? [selector] : parent.querySelectorAll(selector);
 }
 
 // set html by selector
@@ -78,7 +78,7 @@ function add_cls(selector, classes) {
   });
 }
 
-// re,pve class by selector
+// remove class by selector
 function remove_cls(selector, classes) {
   qs(selector).forEach(function(el) {
     if ( typeof classes != 'array' ) classes = [classes];
@@ -87,6 +87,16 @@ function remove_cls(selector, classes) {
       el.classList.remove(cls);
     })
   });
+}
+
+// hide element
+function hide(selector) {
+  add_cls(selector, 'hide');
+}
+
+// show element
+function show(selector) {
+  remove_cls(selector, 'hide');
 }
 
 // live listener
