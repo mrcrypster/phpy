@@ -188,6 +188,11 @@ class phpy {
       $styles[] = [ 'link' => ['attrs' => ['rel' => 'stylesheet', 'href' => $url]] ];
     }
     
+    if ( $data['head'] ) {
+      $add_head = $data['head'] ?: [];
+      unset($data['head']);
+    }
+    
     return [
       'html' => [
         'head' => [
@@ -195,7 +200,7 @@ class phpy {
           '<meta name="viewport" content="width=device-width, initial-scale=1">',
           $styles,
           [ 'link' => ['attrs' => ['rel' => "icon", 'href' => "/img/favicon.ico"]] ],
-          $data['head'] ?: []
+          $add_head
         ],
         'body' => ['html' => $data['html'], 'attrs' => $data['attrs']],
         $scripts
