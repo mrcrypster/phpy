@@ -194,7 +194,8 @@ class phpy {
           'title' => $data['title'],
           '<meta name="viewport" content="width=device-width, initial-scale=1">',
           $styles,
-          [ 'link' => ['attrs' => ['rel' => "icon", 'href' => "/img/favicon.ico"]] ]
+          [ 'link' => ['attrs' => ['rel' => "icon", 'href' => "/img/favicon.ico"]] ],
+          $data['head'] ?: []
         ],
         'body' => ['html' => $data['html'], 'attrs' => $data['attrs']],
         $scripts
