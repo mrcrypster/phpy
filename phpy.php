@@ -245,6 +245,16 @@ function phpy_pre_render_input(&$html, &$attrs) {
   }
 }
 
+function phpy_pre_render_textarea(&$html, &$attrs) {
+  if ( isset($attrs['default'][0]) ) {
+    $attrs['name'] = $attrs['default'][0];
+  }
+
+  if ( isset($attrs['default'][1]) ) {
+    $attrs['placeholder'] = $attrs['default'][1];
+  }
+}
+
 function phpy_pre_render_form(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     $attrs['action'] = $attrs['default'][0];
