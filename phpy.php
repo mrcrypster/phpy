@@ -5,8 +5,14 @@
 class phpy {
   # init & config
   private $config = [];
+  public static $listeners = [];
+
   public function __construct($config = []) {
     $this->config = $config;
+  }
+
+  public static function on($endpoint, $callback) {
+    self::$listeners[$endpoint][] = $callback;
   }
 
 
@@ -16,13 +22,46 @@ class phpy {
     return parse_url($_SERVER['REQUEST_URI'])['path'];
   }
 
+  # files collector
+  public function collect($extensions, $dir = null) {
+    $content = '';
+    if ( !$dir ) {
+      $content .= $this->collect($extensions, __DIR__);
+    }
+
+    $dir = isset($dir) ? $dir : dirname($this->config['/']);
+    $dir .= '/*';
+
+    foreach ( glob($dir) as $f ) {
+      if ( is_dir($f) ) {
+        $content .= $this->collect($extensions, $f);
+      }
+      else if ( in_array(pathinfo($f, PATHINFO_EXTENSION), $extensions) ) {
+        $content .= file_get_contents($f);
+      }
+    }
+
+    return $content;
+  }
+
 
 
   # application launcher
   public function app() {
+    if ( isset(self::$listeners[$this->endpoint()]) ) {
+      foreach ( self::$listeners[$this->endpoint()] as $cb ) {
+        $cb($this);
+      }
+      return;
+    }
+
     if ( $this->endpoint() == '/js.js' ) {
       header('Content-type: application/javascript');
       readfile(__DIR__ . '/phpy.js');
+    }
+    else if ( $this->endpoint() == '/css.css' ) {
+      header('Content-type: text/css');
+      readfile(__DIR__ . '/phpy.css');
     }
     else if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
       $data = $this->com_data( $this->endpoint() );
@@ -181,6 +220,7 @@ class phpy {
 
 
 /* Universal component loader */
+
 function phpy($data = null) {
   static $phpy;
 
@@ -199,7 +239,10 @@ function phpy($data = null) {
 
 function phpy_pre_render_html(&$html, &$attrs) {
   return '<html>' .
-         '<head><title>' . akey($attrs, ':title') . '</title></head>' .
+         '<head>' .
+           '<title>' . akey($attrs, ':title') . '</title>' .
+           '<link href="/css.css?' . akey($attrs, ':v') . '" rel="stylesheet">' .
+         '</head>' .
          '<body>' . $html . '</body>' .
          '<script src="/js.js?' . akey($attrs, ':v') . '"></script>'.
          '</html>';
