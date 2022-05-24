@@ -4,6 +4,12 @@ function phpy(com, data, callback) {
   if ( typeof data != 'object' ) {
     data = {value: data};
   }
+
+  if ( typeof this.dataset == 'object' ) {
+    for ( var k in this.dataset ) {
+      data[k] = this.dataset[k];
+    }
+  }
   
   if ( data instanceof HTMLFormElement ) {
     data = new FormData(data);
