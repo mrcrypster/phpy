@@ -273,6 +273,7 @@ function phpy_pre_render_button(&$html, &$attrs) {
 function phpy_pre_render_input(&$html, &$attrs) {
   if ( $html && !isset($attrs['value']) ) {
     $attrs['value'] = $html;
+    $html = '';
   }
 
   if ( !isset($attrs['type']) ) {
