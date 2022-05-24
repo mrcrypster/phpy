@@ -35,21 +35,42 @@ class phpy {
       echo json_encode($data);
     }
     else {
-      return $this->com_render( isset($this->config['layout']) ?: 'layout' );
+      echo $this->com_render( isset($this->config['layout']) ?: 'layout' );
     }
+  }
+
+  # com launcher
+  public function com($com = null) {
+    if ( is_null($com) ) {
+      $com = $this->endpoint();
+    }
+
+    return $this->com_render($com);
   }
 
   # get com file path
   public function com_file($endpoint) {
-    return dirname($this->config['/']) . '/' .
+    $file = dirname($this->config['/']) . '/' .
            (isset($this->config['app']) ?: 'app') . '/' .
            $endpoint . '.php';
+
+    if ( is_file($file) ) {
+      return $file;
+    }
+
+    $file = dirname($this->config['/']) . '/' .
+           (isset($this->config['app']) ?: 'app') . '/' .
+           $endpoint . '/default.php';
+
+    if ( is_file($file) ) {
+      return $file;
+    }
   }
 
   # get com data by endpoint
   public function com_data($endpoint) {
     $file = $this->com_file($endpoint);
-    if ( is_file($file) ) {
+    if ( $file ) {
       return include $file;
     }
     else {
@@ -63,8 +84,7 @@ class phpy {
 
     # by default - render html
     if ( true ) {
-      $html = $this->render($tpl);
-      echo $html[0];
+      return $this->render($tpl)[0];
     }
   }
 
@@ -161,7 +181,7 @@ class phpy {
 
 
 /* Universal component loader */
-function phpy($data) {
+function phpy($data = null) {
   static $phpy;
 
   if ( !$phpy ) {
@@ -208,6 +228,10 @@ function phpy_pre_render_button(&$html, &$attrs) {
 }
 
 function phpy_pre_render_input(&$html, &$attrs) {
+  if ( $html && !isset($attrs['value']) ) {
+    $attrs['value'] = $html;
+  }
+
   if ( !isset($attrs['type']) ) {
     $attrs['type'] = 'text';
   }
