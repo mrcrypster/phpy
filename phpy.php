@@ -319,3 +319,14 @@ function phpy_pre_render_form(&$html, &$attrs) {
 function akey($array, $key, $default = null) {
   return isset($array[$key]) ? $array[$key] : $default;
 }
+
+function redirect($url) {
+  if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+    header('Xlocation: ' . $url);
+    exit;
+  }
+  else {
+    header('Location: ' . $url);
+    exit;
+  }
+}
