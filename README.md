@@ -1,7 +1,8 @@
-# phpy
-Component-based PHP markup framework for fast prototyping
+# PHPy 2.0
 
-V1.0 released on October, 5th.
-V2.0 work started
+Component-based PHP markup language and framework for fast prototyping to get apps done.
+
+V2.0 initial version is here.
+Planning to go into production at the end of June, 2022.
 
 The [onelinerhub.com](https://onelinerhub.com/) ([onelinerhub](https://github.com/nonunicorn/onelinerhub)) is running on top of PHPy framework.
