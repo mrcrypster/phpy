@@ -330,3 +330,6 @@ function redirect($url) {
     exit;
   }
 }
+
+function e($text) {
+  return htmlspecialchars($text);
