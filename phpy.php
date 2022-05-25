@@ -79,7 +79,7 @@ class phpy {
   }
 
   # com launcher
-  public function com($com = null) {
+  public function com($com = null, $args = []) {
     if ( is_null($com) ) {
       $com = $this->endpoint();
     }
@@ -107,9 +107,12 @@ class phpy {
   }
 
   # get com data by endpoint
-  public function com_data($endpoint) {
+  public function com_data($endpoint, $args = []) {
     $file = $this->com_file($endpoint);
     if ( $file ) {
+      foreach ( $args as $k => $v ) {
+        $$k = $v;
+      }
       return include $file;
     }
     else {
@@ -118,8 +121,8 @@ class phpy {
   }
 
   # render com by endpoint
-  public function com_render($endpoint, $context = []) {
-    $tpl = $this->com_data($endpoint);
+  public function com_render($endpoint, $args = []) {
+    $tpl = $this->com_data($endpoint, $args);
 
     # by default - render html
     if ( true ) {
@@ -221,7 +224,7 @@ class phpy {
 
 /* Universal component loader */
 
-function phpy($data = null) {
+function phpy($data = null, $args = []) {
   static $phpy;
 
   if ( !$phpy ) {
@@ -229,7 +232,7 @@ function phpy($data = null) {
     return $phpy->app();
   }
   else {
-    return $phpy->com($data);
+    return $phpy->com($data, $args);
   }
 }
 
