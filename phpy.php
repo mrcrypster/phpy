@@ -84,7 +84,7 @@ class phpy {
       $com = $this->endpoint();
     }
 
-    return $this->com_render($com);
+    return $this->com_render($com, $args);
   }
 
   # get com file path
