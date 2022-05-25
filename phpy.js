@@ -22,10 +22,10 @@ function phpy(com, data, callback) {
     method: 'post',
     body: data
   }).then(function(r) {
-    /*if ( r.headers.get('Xlocation') ) {
+    if ( r.headers.get('Xlocation') ) {
       location = r.headers.get('Xlocation');
       return;
-    }*/
+    }
     
     return r.json();
   }).then(function(r) {
