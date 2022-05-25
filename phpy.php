@@ -289,6 +289,13 @@ function phpy_pre_render_input(&$html, &$attrs) {
   }
 }
 
+function phpy_pre_render_file(&$html, &$attrs) {
+  $attrs['name'] = isset($attrs['default'][0]) ?: (isset($attrs['name']) ? $attrs['name'] : 'file');
+  $attrs_html = $this->tag_attrs($attrs);
+  
+  return "<{$tag}{$attrs_html}/>";
+}
+
 function phpy_pre_render_textarea(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     $attrs['name'] = $attrs['default'][0];
