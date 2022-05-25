@@ -164,7 +164,7 @@ class phpy {
     }
 
     if ( function_exists("phpy_pre_render_{$tag}") ) {
-      $custom_html = call_user_func_array("phpy_pre_render_{$tag}", [&$html, &$attrs]);
+      $custom_html = call_user_func_array("phpy_pre_render_{$tag}", [&$html, &$attrs, $this]);
     }
 
     $attrs_html = $this->tag_attrs($attrs);
@@ -289,9 +289,9 @@ function phpy_pre_render_input(&$html, &$attrs) {
   }
 }
 
-function phpy_pre_render_file(&$html, &$attrs) {
+function phpy_pre_render_file(&$html, &$attrs, $phpy) {
   $attrs['name'] = isset($attrs['default'][0]) ?: (isset($attrs['name']) ? $attrs['name'] : 'file');
-  $attrs_html = $this->tag_attrs($attrs);
+  $attrs_html = $phpy->tag_attrs($attrs);
   
   return "<{$tag}{$attrs_html}/>";
 }
