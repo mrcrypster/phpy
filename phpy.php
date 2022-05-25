@@ -333,3 +333,4 @@ function redirect($url) {
 
 function e($text) {
   return htmlspecialchars($text);
+}
