@@ -293,7 +293,7 @@ function phpy_pre_render_file(&$html, &$attrs, $phpy) {
   $attrs['name'] = isset($attrs['default'][0]) ?: (isset($attrs['name']) ? $attrs['name'] : 'file');
   $attrs_html = $phpy->tag_attrs($attrs);
   
-  return "<{$tag}{$attrs_html}/>";
+  return "<input type="file" {$attrs_html}/>";
 }
 
 function phpy_pre_render_textarea(&$html, &$attrs) {
