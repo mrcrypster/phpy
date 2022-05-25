@@ -290,7 +290,7 @@ function phpy_pre_render_input(&$html, &$attrs) {
 }
 
 function phpy_pre_render_file(&$html, &$attrs, $phpy) {
-  $attrs['name'] = isset($attrs['default'][0]) ?: (isset($attrs['name']) ? $attrs['name'] : 'file');
+  $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'file');
   $attrs_html = $phpy->tag_attrs($attrs);
   
   return "<input type=\"file\" {$attrs_html}/>";
