@@ -352,3 +352,13 @@ function redirect($url) {
 function e($text) {
   return htmlspecialchars($text);
 }
+
+function nums($namespace = 'default') {
+  static $counters = [];
+  if ( !isset($counters[$namespace]) ) {
+    return $counters[$namespace] = 1;
+  }
+  else {
+    return ++$counters[$namespace];
+  }
+}
