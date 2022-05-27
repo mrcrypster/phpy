@@ -271,6 +271,12 @@ function phpy_pre_render_button(&$html, &$attrs) {
       $attrs['onclick'] = 'phpy.apply(this, [\'' . $attrs['default'][0] . '\'])';
     }
   }
+  
+  $attrs['type'] = isset($attrs['type']) ? $attrs['type'] : 'button';
+}
+
+function phpy_pre_render_submit(&$html, &$attrs) {
+  $attrs['type'] = 'submit';
 }
 
 function phpy_pre_render_input(&$html, &$attrs) {
