@@ -299,6 +299,13 @@ function phpy_pre_render_file(&$html, &$attrs, $phpy) {
   return "<input type=\"file\" {$attrs_html}/>";
 }
 
+function phpy_pre_render_check(&$html, &$attrs, $phpy) {
+  $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'check');
+  $attrs_html = $phpy->tag_attrs($attrs);
+  
+  return "<input type=\"checkbox\" {$attrs_html}/>";
+}
+
 function phpy_pre_render_textarea(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     $attrs['name'] = $attrs['default'][0];
