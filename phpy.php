@@ -277,6 +277,8 @@ function phpy_pre_render_button(&$html, &$attrs) {
 
 function phpy_pre_render_submit(&$html, &$attrs) {
   $attrs['type'] = 'submit';
+  $attrs_html = $phpy->tag_attrs($attrs);
+  return "<button {$attrs_html}>{$html}</button>";
 }
 
 function phpy_pre_render_input(&$html, &$attrs) {
