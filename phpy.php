@@ -166,8 +166,8 @@ class phpy {
       $tag = 'span';
     }
 
-    if ( function_exists("phpy_pre_render_{$tag}") ) {
-      $custom_html = call_user_func_array("phpy_pre_render_{$tag}", [&$html, &$attrs, $this]);
+    if ( function_exists("phpy_post_render_{$tag}") ) {
+      $custom_html = call_user_func_array("phpy_post_render_{$tag}", [&$html, &$attrs, $this]);
     }
 
     $attrs_html = $this->tag_attrs($attrs);
@@ -207,6 +207,11 @@ class phpy {
           $attrs[$kk] = $tt;
         }
         else {
+          $tag = preg_split('/(\.|:|#)/', $kk)[0];
+          if ( function_exists("phpy_pre_render_{$tag}") ) {
+            call_user_func_array("phpy_pre_render_{$tag}", [&$kk, &$tt, $this]);
+          }
+
           list($in, $at) = $this->render($tt);
           $html .= $this->tag($kk, $in, $at);
         }
@@ -240,7 +245,15 @@ function phpy($data = null, $args = []) {
 
 /* Tag preprocessors */
 
-function phpy_pre_render_html(&$html, &$attrs) {
+function phpy_pre_render_select(&$key, &$tpl, $phpy) {
+  $keys = explode(':', $key);
+  $tpl = array_map(
+    fn($v, $k) => ['option' => array_merge([':value' => $k, $v], $keys[2] == $k ? [':selected' => 'on'] : [])],
+    array_values($tpl), array_keys($tpl)
+  );
+}
+
+function phpy_post_render_html(&$html, &$attrs) {
   return '<html>' .
          '<head>' .
            '<title>' . akey($attrs, ':title') . '</title>' .
@@ -251,7 +264,7 @@ function phpy_pre_render_html(&$html, &$attrs) {
          '</html>';
 }
 
-function phpy_pre_render_a(&$html, &$attrs) {
+function phpy_post_render_a(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     if ( strpos($attrs['default'][0], '(') ) {
       $attrs['href'] = 'javascript:' . $attrs['default'][0];
@@ -262,7 +275,7 @@ function phpy_pre_render_a(&$html, &$attrs) {
   }
 }
 
-function phpy_pre_render_button(&$html, &$attrs) {
+function phpy_post_render_button(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     if ( strpos($attrs['default'][0], '(') ) {
       $attrs['onclick'] = $attrs['default'][0];
@@ -275,13 +288,13 @@ function phpy_pre_render_button(&$html, &$attrs) {
   $attrs['type'] = isset($attrs['type']) ? $attrs['type'] : 'button';
 }
 
-function phpy_pre_render_submit(&$html, &$attrs, $phpy) {
+function phpy_post_render_submit(&$html, &$attrs, $phpy) {
   $attrs['type'] = 'submit';
   $attrs_html = $phpy->tag_attrs($attrs);
   return "<button {$attrs_html}>{$html}</button>";
 }
 
-function phpy_pre_render_input(&$html, &$attrs) {
+function phpy_post_render_input(&$html, &$attrs) {
   if ( $html && !isset($attrs['value']) ) {
     $attrs['value'] = $html;
     $html = '';
@@ -300,21 +313,27 @@ function phpy_pre_render_input(&$html, &$attrs) {
   }
 }
 
-function phpy_pre_render_file(&$html, &$attrs, $phpy) {
+function phpy_post_render_select(&$html, &$attrs) {
+  if ( isset($attrs['default'][0]) ) {
+    $attrs['name'] = $attrs['default'][0];
+  }
+}
+
+function phpy_post_render_file(&$html, &$attrs, $phpy) {
   $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'file');
   $attrs_html = $phpy->tag_attrs($attrs);
   
   return "<input type=\"file\" {$attrs_html}/>";
 }
 
-function phpy_pre_render_check(&$html, &$attrs, $phpy) {
+function phpy_post_render_check(&$html, &$attrs, $phpy) {
   $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'check');
   $attrs_html = $phpy->tag_attrs($attrs);
   
   return "<input type=\"checkbox\" {$attrs_html}/>";
 }
 
-function phpy_pre_render_textarea(&$html, &$attrs) {
+function phpy_post_render_textarea(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     $attrs['name'] = $attrs['default'][0];
   }
@@ -324,7 +343,7 @@ function phpy_pre_render_textarea(&$html, &$attrs) {
   }
 }
 
-function phpy_pre_render_form(&$html, &$attrs) {
+function phpy_post_render_form(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     $attrs['action'] = $attrs['default'][0];
     $attrs['onsubmit'] = 'phpy.apply(this, [\'' . $attrs['action'] . '\', this]); return false;';
