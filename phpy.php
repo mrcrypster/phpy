@@ -313,6 +313,19 @@ function phpy_post_render_input(&$html, &$attrs) {
   }
 }
 
+function phpy_post_render_hidden(&$html, &$attrs) {
+  if ( $html && !isset($attrs['value']) ) {
+    $attrs['value'] = $html;
+    $html = '';
+  }
+
+  $attrs['type'] = 'hidden';
+
+  if ( isset($attrs['default'][0]) ) {
+    $attrs['name'] = $attrs['default'][0];
+  }
+}
+
 function phpy_post_render_select(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     $attrs['name'] = $attrs['default'][0];
