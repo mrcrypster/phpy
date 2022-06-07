@@ -140,7 +140,7 @@ class phpy {
 
     if ( preg_match_all('/\.([^:# ]+)/', $tag, $mm) ) {
       foreach ( $mm[1] as $class ) {
-        $classes[] = $class;
+        $classes[] = str_replace('.', ' ', $class);
         $tag = str_replace('.' . $class, '', $tag);
       }
 
