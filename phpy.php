@@ -324,6 +324,9 @@ function phpy_post_render_hidden(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     $attrs['name'] = $attrs['default'][0];
   }
+
+  $attrs_html = $phpy->tag_attrs($attrs);
+  return "<input {$attrs_html}/>";
 }
 
 function phpy_post_render_select(&$html, &$attrs) {
