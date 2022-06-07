@@ -38,7 +38,11 @@ function phpy(com, data, callback) {
 
 // Short query selector
 function qs(selector, callback) {
-  document.querySelectorAll(selector).forEach(function(el) {
-    callback.apply(el, [el]);
-  });
+  let found = document.querySelectorAll(selector);
+
+  if ( callback ) {
+    found.forEach(function(el) { callback.apply(el, [el]); });
+  }
+
+  return found;
 }
