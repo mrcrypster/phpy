@@ -313,7 +313,7 @@ function phpy_post_render_input(&$html, &$attrs) {
   }
 }
 
-function phpy_post_render_hidden(&$html, &$attrs) {
+function phpy_post_render_hidden(&$html, &$attrs, $phpy) {
   if ( $html && !isset($attrs['value']) ) {
     $attrs['value'] = $html;
     $html = '';
