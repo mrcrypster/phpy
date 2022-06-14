@@ -37,7 +37,7 @@ class phpy {
         $content .= $this->collect($extensions, $f);
       }
       else if ( in_array(pathinfo($f, PATHINFO_EXTENSION), $extensions) ) {
-        $content .= file_get_contents($f);
+        $content .= file_get_contents($f) . "\n";
       }
     }
 
