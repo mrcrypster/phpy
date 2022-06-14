@@ -29,13 +29,13 @@ function phpy(com, data, callback) {
     
     return r.json();
   }).then(function(r) {
-    let default = true;
+    let def = true;
 
     if ( typeof(callback) != 'undefined' ) {
-      default = callback.apply(this, [r]);
+      def = callback.apply(this, [r]);
     }
 
-    if ( default ) {
+    if ( def ) {
       for ( let k in r ) {
         qs(k, (e) => e.innerHTML = r[k]);
       }
