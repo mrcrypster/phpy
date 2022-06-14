@@ -29,17 +29,11 @@ function phpy(com, data, callback) {
     
     return r.json();
   }).then(function(r) {
-    let def = true;
-
-    if ( typeof(callback) != 'undefined' ) {
-      def = callback.apply(this, [r]);
+    for ( let k in r ) {
+      qs(k, (e) => e.innerHTML = r[k]);
     }
 
-    if ( def ) {
-      for ( let k in r ) {
-        qs(k, (e) => e.innerHTML = r[k]);
-      }
-    }
+    callback.apply(this, [r]);
   });
 }
 
