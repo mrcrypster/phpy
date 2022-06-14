@@ -366,9 +366,15 @@ function phpy_post_render_textarea(&$html, &$attrs) {
 }
 
 function phpy_post_render_form(&$html, &$attrs) {
+  $after_callback = '';
+
+  if ( isset($attrs['default'][1]) ) {
+    $after_callback = ', ' . $attrs['default'][1];
+  }
+
   if ( isset($attrs['default'][0]) ) {
     $attrs['action'] = $attrs['default'][0];
-    $attrs['onsubmit'] = 'phpy.apply(this, [\'' . $attrs['action'] . '\', this]); return false;';
+    $attrs['onsubmit'] = 'phpy.apply(this, [\'' . $attrs['action'] . '\', this' . $after_callback . ']); return false;';
   }
 }
 
