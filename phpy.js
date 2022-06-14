@@ -29,8 +29,16 @@ function phpy(com, data, callback) {
     
     return r.json();
   }).then(function(r) {
-    for ( let k in r ) {
-      qs(k, (e) => e.innerHTML = r[k]);
+    let default = true;
+
+    if ( typeof(callback) != 'undefined' ) {
+      default = callback.apply(this, [r]);
+    }
+
+    if ( default ) {
+      for ( let k in r ) {
+        qs(k, (e) => e.innerHTML = r[k]);
+      }
     }
   });
 }

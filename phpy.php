@@ -276,12 +276,18 @@ function phpy_post_render_a(&$html, &$attrs) {
 }
 
 function phpy_post_render_button(&$html, &$attrs) {
+  $after_callback = '';
+
+  if ( isset($attrs['default'][1]) ) {
+    $after_callback = ', ' . $attrs['default'][1];
+  }
+
   if ( isset($attrs['default'][0]) ) {
     if ( strpos($attrs['default'][0], '(') ) {
       $attrs['onclick'] = $attrs['default'][0];
     }
     else {
-      $attrs['onclick'] = 'phpy.apply(this, [\'' . $attrs['default'][0] . '\'])';
+      $attrs['onclick'] = 'phpy.apply(this, [\'' . $attrs['default'][0] . '\']' . $after_callback . ')';
     }
   }
   
