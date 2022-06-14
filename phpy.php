@@ -279,7 +279,7 @@ function phpy_post_render_button(&$html, &$attrs) {
   $after_callback = '';
 
   if ( isset($attrs['default'][1]) ) {
-    $after_callback = ', [], ' . $attrs['default'][1];
+    $after_callback = ', {}, ' . $attrs['default'][1];
   }
 
   if ( isset($attrs['default'][0]) ) {
