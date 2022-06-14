@@ -31,9 +31,6 @@ function phpy(com, data, callback) {
   }).then(function(r) {
     let def = true;
 
-    console.log(typeof(callback));
-    console.log(callback);
-
     if ( typeof(callback) != 'undefined' ) {
       def = callback.apply(this, [r]);
     }

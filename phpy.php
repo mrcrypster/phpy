@@ -287,7 +287,7 @@ function phpy_post_render_button(&$html, &$attrs) {
       $attrs['onclick'] = $attrs['default'][0];
     }
     else {
-      $attrs['onclick'] = 'phpy.apply(this, [\'' . $attrs['default'][0] . '\']' . $after_callback . ')';
+      $attrs['onclick'] = 'phpy.apply(this, [\'' . $attrs['default'][0] . '\'' . $after_callback . '])';
     }
   }
   
