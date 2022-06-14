@@ -350,6 +350,10 @@ function phpy_post_render_file(&$html, &$attrs, $phpy) {
 
 function phpy_post_render_check(&$html, &$attrs, $phpy) {
   $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'check');
+  if ( $html || isset($attrs['default'][1]) ) {
+    $attrs['checked'] = 1;
+  }
+  
   $attrs_html = $phpy->tag_attrs($attrs);
   
   return "<input type=\"checkbox\" {$attrs_html}/>";
