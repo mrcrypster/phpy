@@ -33,7 +33,9 @@ function phpy(com, data, callback) {
       qs(k, (e) => e.innerHTML = r[k]);
     }
 
-    callback.apply(this, [r]);
+    if ( typeof(callback) != 'undefined' ) {
+      callback.apply(this, [r]);
+    }
   });
 }
 
