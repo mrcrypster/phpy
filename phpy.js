@@ -30,7 +30,7 @@ function phpy(com, data, callback) {
     return r.json();
   }).then(function(r) {
     for ( let k in r ) {
-      qs(k).forEach((e) => e.innerHTML = r[k]);
+      qs(k, (e) => e.innerHTML = r[k]);
     }
 
     if ( typeof(callback) != 'undefined' ) {
