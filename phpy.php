@@ -157,7 +157,7 @@ class phpy {
 
     if ( preg_match_all('/\:([^#.:]*)/', $tag, $mm) ) {
       foreach ( $mm[1] as $param ) {
-        $tag = str_replace(':' . $param, '', $tag);
+        $tag = $param ? str_replace(':' . $param, '', $tag) : '';
         $attrs['default'][] = $param;
       }
     }
