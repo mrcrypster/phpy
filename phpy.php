@@ -281,13 +281,18 @@ function phpy_post_render_button(&$html, &$attrs) {
   if ( isset($attrs['default'][1]) ) {
     $after_callback = ', {}, ' . $attrs['default'][1];
   }
+  
+  $confirm = ';'
+  if ( isset($attrs['default'][2]) ) {
+    $confirm = 'if ( confirm(\'' . e($attrs['default'][2]) . '\') ) ';
+  }
 
   if ( isset($attrs['default'][0]) ) {
     if ( strpos($attrs['default'][0], '(') ) {
       $attrs['onclick'] = $attrs['default'][0];
     }
     else {
-      $attrs['onclick'] = 'phpy.apply(this, [\'' . $attrs['default'][0] . '\'' . $after_callback . '])';
+      $attrs['onclick'] = $confirm . 'phpy.apply(this, [\'' . $attrs['default'][0] . '\'' . $after_callback . '])';
     }
   }
   
