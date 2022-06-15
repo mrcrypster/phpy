@@ -157,10 +157,12 @@ class phpy {
 
     if ( preg_match_all('/\:([^#.:]*)/', $tag, $mm) ) {
       foreach ( $mm[1] as $param ) {
-        $tag = $param ? str_replace(':' . $param, '', $tag) : '';
         $attrs['default'][] = $param;
       }
+
+      $tag = preg_replace('/\:([^#.:]*)/', '', $tag);
     }
+
 
     if ( !$tag ) {
       $tag = 'span';
