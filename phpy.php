@@ -282,7 +282,7 @@ function phpy_post_render_button(&$html, &$attrs) {
     $after_callback = ', {}, ' . $attrs['default'][1];
   }
   
-  $confirm = ';'
+  $confirm = '';
   if ( isset($attrs['default'][2]) ) {
     $confirm = 'if ( confirm(\'' . e($attrs['default'][2]) . '\') ) ';
   }
