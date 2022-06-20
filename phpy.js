@@ -27,7 +27,12 @@ function phpy(com, data, callback) {
       return;
     }
 
-    console.log(r.headers.get('Xpub'));
+    if ( r.headers.get('Xpub') ) {
+      let events = JSON.parse(atob(r.headers.get('Xpub')));
+      for ( let e in events ) {
+        pub(e, events[e]);
+      }
+    }
     
     return r.json();
   }).then(function(r) {
