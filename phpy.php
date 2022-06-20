@@ -278,7 +278,7 @@ function phpy_post_render_html(&$html, &$attrs) {
          '</head>' .
          '<body>' . $html . '</body>' .
          '<script src="/js.js?' . akey($attrs, ':v') . '"></script>'.
-         $pub_events ? '<script>' . implode(';', $pub_events) . '</script>' .
+         ($pub_events ? ('<script>' . implode(';', $pub_events) . '</script>') : '') .
          '</html>';
 }
 
