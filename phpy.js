@@ -26,6 +26,8 @@ function phpy(com, data, callback) {
       location = r.headers.get('Xlocation');
       return;
     }
+
+    console.log(r.headers.get('Xpub'));
     
     return r.json();
   }).then(function(r) {
@@ -49,4 +51,25 @@ function qs(selector, callback) {
   }
 
   return found;
+}
+
+
+
+// Pub/sub
+let pubsub = {}
+
+function pub(event, data) {
+  if ( pubsub[event] ) {
+    pubsub[event].forEach(function(cb) {
+      cb(data);
+    });
+  }
+}
+
+function sub(event, callback) {
+  if ( !pubsub[event] ) {
+    pubsub[event] = [];
+  }
+
+  pubsub[event].push(callback);
 }
