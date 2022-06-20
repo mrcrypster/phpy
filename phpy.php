@@ -268,7 +268,7 @@ function phpy_post_render_html(&$html, &$attrs) {
   $pub_events = [];
   if ( $this->events ) foreach ( $this->events as $event => $data ) {
     $json = json_encode($data);
-    $pub_events[] = "pub('{$event}', {$json});"
+    $pub_events[] = "pub('{$event}', {$json});";
   }
 
   return '<html>' .
