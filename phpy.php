@@ -6,7 +6,7 @@ class phpy {
   # init & config
   private $config = [];
   public static $listeners = [];
-  protected static $events = [];
+  public static $events = [];
 
   public function __construct($config = []) {
     $this->config = $config;
@@ -48,7 +48,7 @@ class phpy {
 
   # publish events
   public static function pub($event, $data = true) {
-    self::$events[$event] = $data;
+    phpy::$events[$event] = $data;
   }
 
 
@@ -78,7 +78,7 @@ class phpy {
       }
 
       header('Content-type: text/json');
-      header('Xpub: ' . base64_encode(json_encode(self::$events)));
+      header('Xpub: ' . base64_encode(json_encode(phpy::$events)));
 
       echo json_encode($data);
     }
@@ -266,7 +266,7 @@ function phpy_pre_render_select(&$key, &$tpl, $phpy) {
 
 function phpy_post_render_html(&$html, &$attrs) {
   $pub_events = [];
-  if ( self::$events ) foreach ( self::$events as $event => $data ) {
+  if ( phpy::$events ) foreach ( phpy::$events as $event => $data ) {
     $json = json_encode($data);
     $pub_events[] = "pub('{$event}', {$json});";
   }
