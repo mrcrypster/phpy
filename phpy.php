@@ -78,7 +78,7 @@ class phpy {
       }
 
       header('Content-type: text/json');
-      header('Xpub: ' . base64_encode(json_encode($this->events)));
+      header('Xpub: ' . base64_encode(json_encode(self::$events)));
 
       echo json_encode($data);
     }
@@ -266,7 +266,7 @@ function phpy_pre_render_select(&$key, &$tpl, $phpy) {
 
 function phpy_post_render_html(&$html, &$attrs) {
   $pub_events = [];
-  if ( $this->events ) foreach ( $this->events as $event => $data ) {
+  if ( self::$events ) foreach ( self::$events as $event => $data ) {
     $json = json_encode($data);
     $pub_events[] = "pub('{$event}', {$json});";
   }
