@@ -265,6 +265,8 @@ function phpy_pre_render_select(&$key, &$tpl, $phpy) {
 }
 
 function phpy_post_render_html(&$html, &$attrs) {
+  phpy::pub(phpy::endpoint());
+
   $pub_events = [];
   if ( phpy::$events ) foreach ( phpy::$events as $event => $data ) {
     $json = json_encode($data);
