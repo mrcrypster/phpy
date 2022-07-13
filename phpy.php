@@ -277,6 +277,7 @@ function phpy_post_render_html(&$html, &$attrs) {
          '<head>' .
            '<title>' . akey($attrs, ':title') . '</title>' .
            '<link href="/css.css?' . akey($attrs, ':v') . '" rel="stylesheet">' .
+            akey($attrs, ':head') .
          '</head>' .
          '<body>' . $html . '</body>' .
          '<script src="/js.js?' . akey($attrs, ':v') . '"></script>'.
