@@ -19,7 +19,7 @@ class phpy {
 
 
   # global context
-  public function endpoint() {
+  public static function endpoint() {
     return parse_url($_SERVER['REQUEST_URI'])['path'];
   }
 
