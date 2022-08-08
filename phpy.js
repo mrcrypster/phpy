@@ -47,7 +47,7 @@ function phpy(com, data, callback) {
 }
 
 
-// Short query selector
+// Short query selector & event handlers 
 function qs(selector, callback) {
   let found = document.querySelectorAll(selector);
 
@@ -56,6 +56,12 @@ function qs(selector, callback) {
   }
 
   return found;
+}
+
+function on(selector, event, callback) {
+  qs(selector).forEach(function(el) {
+    el.addEventListener(event, callback);
+  });
 }
 
 
