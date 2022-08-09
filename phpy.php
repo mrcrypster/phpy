@@ -58,10 +58,10 @@ class phpy {
     foreach ( self::$listeners as $pattern => $handlers ) {
       if ( ($pattern == $this->endpoint()) || preg_match($pattern, $this->endpoint()) ) {
         foreach ( $handlers as $cb ) {
-          $return = $cb($this);
+          $continue = $cb($this);
         }
         
-        if ( $return ) {
+        if ( !$continue ) {
           return;
         }
       }
