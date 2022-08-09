@@ -55,13 +55,18 @@ class phpy {
 
   # application launcher
   public function app() {
-    if ( isset(self::$listeners[$this->endpoint()]) ) {
-      foreach ( self::$listeners[$this->endpoint()] as $cb ) {
-        $cb($this);
+    foreach ( self::$listeners as $pattern => $handlers ) {
+      if ( ($pattern == $this->endpoint()) || preg_match($pattern, $this->endpoint()) ) {
+        foreach ( $handlers as $cb ) {
+          $return = $cb($this);
+        }
+        
+        if ( $return ) {
+          return;
+        }
       }
-      return;
     }
-
+    
     if ( $this->endpoint() == '/js.js' ) {
       header('Content-type: application/javascript');
       readfile(__DIR__ . '/phpy.js');
