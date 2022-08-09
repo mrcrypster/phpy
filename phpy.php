@@ -15,6 +15,10 @@ class phpy {
   public static function on($endpoint, $callback) {
     self::$listeners[$endpoint][] = $callback;
   }
+  
+  public function set($param, $value) {
+    $this->config[$param] = $value;
+  }
 
 
 
