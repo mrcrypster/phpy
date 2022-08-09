@@ -12,7 +12,7 @@ class phpy {
   public static $events = [];
 
   public function __construct($config = []) {
-    $this->config = $config;
+    $this->config = array_merge($this->config ?: [], $config ?: []);
   }
 
   public static function on($endpoint, $callback) {
