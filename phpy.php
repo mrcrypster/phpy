@@ -4,7 +4,10 @@
 
 class phpy {
   # init & config
-  private $config = [];
+  private $config = [
+    'layout' => 'layout'
+  ];
+  
   public static $listeners = [];
   public static $events = [];
 
@@ -92,7 +95,7 @@ class phpy {
       echo json_encode($data);
     }
     else {
-      echo $this->com_render( isset($this->config['layout']) ?: 'layout' );
+      echo $this->com_render( $this->config['layout'] );
     }
   }
 
