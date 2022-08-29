@@ -27,7 +27,7 @@ class phpy {
 
   # global context
   public static function endpoint() {
-    return parse_url($_SERVER['REQUEST_URI'])['path'];
+    return self::$config['endpoint'] ?: parse_url($_SERVER['REQUEST_URI'])['path'];
   }
 
   # files collector
