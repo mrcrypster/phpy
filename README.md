@@ -28,7 +28,7 @@ php phpy.php init
 ]]);
 ```
 
-4. [Setup web server](#howto) and open your app in browser.
+4. [Setup web server](#howto) and open your web app in browser.
 
 ## Contribute
 This is a repository with prebuilt code.
