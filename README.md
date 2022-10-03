@@ -1,4 +1,4 @@
-# Phpy 2
+# PHPy 2
 
 Component-based PHP markup framework for rapid apps creation.
 
