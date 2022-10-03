@@ -3,7 +3,7 @@
 Component-based PHP markup framework for rapid apps creation.
 
 ## Concepts
-- Deliver & test everything fast
+- Deliver & test fast
 - Change & move code a lot
 - Less code & dependencies = better
 - Folders/files instead of structures to organize code
