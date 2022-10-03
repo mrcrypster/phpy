@@ -8,7 +8,6 @@ Component-based PHP markup framework for rapid apps creation.
 - Less code & dependencies = better
 - Folders/files instead of structures to organize code
 - Keep files small
-- Refactor after tests & step-by-step
 
 ## Quick start
 1. Clone repo:
