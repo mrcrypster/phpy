@@ -29,6 +29,8 @@ php phpy.php init
 ]]);
 ```
 
+4. [Setup web server](#howto) and open your app in webbrowser.
+
 ## Contribute
 This is a repository with prebuilt code.
 Sources and tests are available in [phpy-src repo](https://github.com/mrcrypster/phpy-src).
