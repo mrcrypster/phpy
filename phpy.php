@@ -3,57 +3,50 @@
 /* Core engine */
 
 class phpy {
-  # init & config
-  private $config = [
-    'layout' => 'layout'
-  ];
-  
+  private $config = [ 'layout' => 'layout' ];
   public static $listeners = [];
   public static $events = [];
 
   public function __construct($config = []) {
     $this->config = array_merge($this->config ?: [], $config ?: []);
+    if ( !isset($this->config['/']) ) {
+      $this->config['/'] = getcwd();
+    }
   }
 
-  public static function on($endpoint, $callback) {
-    self::$listeners[$endpoint][] = $callback;
-  }
-  
   public function set($param, $value) {
     $this->config[$param] = $value;
   }
 
+  public function get($param) {
+    return $this->config[$param];
+  }
+
+  public static function instance($data = []) {
+    static $phpy;
+
+    if ( !$phpy ) {
+      $phpy = new phpy($data);
+    }
+
+    return $phpy;
+  }
 
 
-  # global context
+
+  /* Global context */
+
+  # Custom URI listeners
+  public static function on($endpoint, $callback) {
+    self::$listeners[$endpoint][] = $callback;
+  }
+
+  # Return current endpoint
   public static function endpoint() {
-    return parse_url($_SERVER['REQUEST_URI'])['path'];
+    return parse_url(isset($_SERVER['REQUEST_URI']) ?: '/')['path'];
   }
 
-  # files collector
-  public function collect($extensions, $dir = null) {
-    $content = '';
-    if ( !$dir ) {
-      $content .= $this->collect($extensions, __DIR__);
-    }
-
-    $dir = isset($dir) ? $dir : dirname($this->config['/']);
-    $dir .= '/*';
-
-    foreach ( glob($dir) as $f ) {
-      if ( is_dir($f) ) {
-        $content .= $this->collect($extensions, $f);
-      }
-      else if ( in_array(pathinfo($f, PATHINFO_EXTENSION), $extensions) ) {
-        $content .= file_get_contents($f) . "\n";
-      }
-    }
-
-    return $content;
-  }
-
-
-  # publish events
+  # Publish event to client
   public static function pub($event, $data = true) {
     phpy::$events[$event] = $data;
   }
@@ -82,7 +75,7 @@ class phpy {
       header('Content-type: text/css');
       readfile(__DIR__ . '/phpy.css');
     }
-    else if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+    else if ( isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST') ) {
       $data = $this->com_data( $this->endpoint() );
 
       foreach ( $data as $container => $tpl ) {
@@ -92,10 +85,10 @@ class phpy {
       header('Content-type: text/json');
       header('Xpub: ' . base64_encode(json_encode(phpy::$events)));
 
-      echo json_encode($data);
+      return json_encode($data);
     }
     else {
-      echo $this->com_render( $this->config['layout'] );
+      return $this->com_render( $this->config['layout'] );
     }
   }
 
@@ -159,6 +152,14 @@ class phpy {
       return $html;
     }
 
+    if ( strpos($tag, ':') ) {
+      $params = explode(':', $tag);
+      $tag = array_shift($params);
+      foreach ( $params as $param ) {
+        $attrs['default'][] = $param;
+      }
+    }
+
     if ( preg_match_all('/\.([^:# ]+)/', $tag, $mm) ) {
       foreach ( $mm[1] as $class ) {
         $classes[] = str_replace('.', ' ', $class);
@@ -175,15 +176,6 @@ class phpy {
         $attrs['id'] = $id;
       }
     }
-
-    if ( preg_match_all('/\:([^#.:]*)/', $tag, $mm) ) {
-      foreach ( $mm[1] as $param ) {
-        $attrs['default'][] = $param;
-      }
-
-      $tag = preg_replace('/\:([^#.:]*)/', '', $tag);
-    }
-
 
     if ( !$tag ) {
       $tag = 'span';
@@ -249,36 +241,103 @@ class phpy {
 }
 
 
+/* PHPy components */
 
-/* Universal component loader */
+# Universal components renderer
+function phpy($data_or_com = null, $args = []) {
+  static $app_loaded = false;
 
-function phpy($data = null, $args = []) {
-  static $phpy;
+  if ( !$app_loaded ) {
+    $app_loaded = true;
+    return phpy::instance($data_or_com)->app();
+  }
 
-  if ( !$phpy ) {
-    $phpy = new phpy($data);
-    return $phpy->app();
+  if ( is_array($data_or_com) ) {
+    return phpy::instance()->render($data_or_com, $args)[0];
+  }
+
+  return phpy::instance()->com($data_or_com, $args);
+}
+
+# files collector
+function collect_files($extensions, $dir = null) {
+  $content = '';
+
+  $dir = isset($dir) ? $dir : dirname(phpy::instance()->get('/'));
+  $dir .= '/*';
+
+  if ( !is_array($extensions) ) {
+    $extensions = [$extensions];
+  }
+
+  foreach ( glob($dir) as $f ) {
+    if ( is_dir($f) ) {
+      $content .= collect_files($extensions, $f);
+    }
+    else if ( in_array(pathinfo($f, PATHINFO_EXTENSION), $extensions) ) {
+      $content .= file_get_contents($f) . "\n";
+    }
+  }
+
+  return $content;
+}
+
+# get current endpoint
+function endpoint() {
+  return phpy::endpoint();
+}
+
+# pub/sub -> publish event
+function pub($event, $data = true) {
+  return phpy::pub($event, $data);
+}
+
+
+
+/* HTTP */
+
+# redirect to specified URL (PHPy AJAX support included)
+function redirect($url) {
+  if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+    header('Xlocation: ' . $url);
+    exit;
   }
   else {
-    return $phpy->com($data, $args);
+    header('Location: ' . $url);
+    exit;
   }
 }
 
 
 
-/* Tag preprocessors */
+/* Utilities */
 
-function phpy_pre_render_select(&$key, &$tpl, $phpy) {
-  $keys = explode(':', $key);
-  $tpl = array_map(
-    fn($v, $k) => ['option' => array_merge([':value' => $k, $v], $keys[2] == $k ? [':selected' => 'on'] : [])],
-    array_values($tpl), array_keys($tpl)
-  );
+# escape string for safe output in html
+function e($text) {
+  return htmlspecialchars($text);
 }
 
-function phpy_post_render_html(&$html, &$attrs) {
-  phpy::pub(phpy::endpoint());
+# safely returns specified $array $key or $default value
+function akey($array, $key, $default = null) {
+  return isset($array[$key]) ? $array[$key] : $default;
+}
 
+# returns number incremented by 1 for each new call
+function nums($namespace = 'default') {
+  static $counters = [];
+  if ( !isset($counters[$namespace]) ) {
+    return $counters[$namespace] = 1;
+  }
+  else {
+    return ++$counters[$namespace];
+  }
+}
+
+
+
+/* <html> */
+
+function phpy_post_render_html(&$html, &$attrs) {
   $pub_events = [];
   if ( phpy::$events ) foreach ( phpy::$events as $event => $data ) {
     $json = json_encode($data);
@@ -297,6 +356,10 @@ function phpy_post_render_html(&$html, &$attrs) {
          '</html>';
 }
 
+
+
+/* <a> */
+
 function phpy_post_render_a(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     if ( strpos($attrs['default'][0], '(') ) {
@@ -307,6 +370,74 @@ function phpy_post_render_a(&$html, &$attrs) {
     }
   }
 }
+
+
+
+/* <form> */
+
+function phpy_post_render_form(&$html, &$attrs) {
+  $after_callback = '';
+
+  if ( isset($attrs['default'][1]) ) {
+    $after_callback = ', ' . $attrs['default'][1];
+  }
+
+  if ( isset($attrs['default'][0]) ) {
+    $attrs['action'] = $attrs['default'][0];
+    $attrs['onsubmit'] = 'phpy.apply(this, [\'' . $attrs['action'] . '\', this' . $after_callback . ']); return false;';
+  }
+}
+
+
+
+/* <select> */
+
+function phpy_pre_render_select(&$key, &$tpl, $phpy) {
+  $keys = explode(':', $key);
+  $tpl = array_map(
+    fn($v, $k) => ['option' => array_merge([':value' => $k, $v], $keys[2] == $k ? [':selected' => 'on'] : [])],
+    array_values($tpl), array_keys($tpl)
+  );
+}
+
+function phpy_post_render_select(&$html, &$attrs) {
+  if ( isset($attrs['default'][0]) ) {
+    $attrs['name'] = $attrs['default'][0];
+  }
+}
+
+
+
+/* <datalist> */
+
+function phpy_pre_render_datalist(&$key, &$tpl, $phpy) {
+  $tpl = array_map(
+    fn($v) => ['option' => [':value' => $v]],
+    $tpl
+  );
+}
+
+function phpy_post_render_datalist(&$html, &$attrs) {
+  if ( isset($attrs['default'][0]) ) {
+    $attrs['id'] = $attrs['default'][0];
+  }
+}
+
+
+
+/* <dl> */
+
+function phpy_pre_render_dl(&$key, &$tpl, $phpy) {
+  $tpl = array_map(
+    fn($v, $k) => ['dt' => $k, 'dd' => $v],
+    array_values($tpl), array_keys($tpl)
+  );
+}
+
+
+
+
+/* <button> */
 
 function phpy_post_render_button(&$html, &$attrs) {
   $after_callback = '';
@@ -332,11 +463,19 @@ function phpy_post_render_button(&$html, &$attrs) {
   $attrs['type'] = isset($attrs['type']) ? $attrs['type'] : 'button';
 }
 
+
+
+/* <button type="submit"> */
+
 function phpy_post_render_submit(&$html, &$attrs, $phpy) {
   $attrs['type'] = 'submit';
   $attrs_html = $phpy->tag_attrs($attrs);
   return "<button {$attrs_html}>{$html}</button>";
 }
+
+
+
+/* <input> */
 
 function phpy_post_render_input(&$html, &$attrs) {
   if ( $html && !isset($attrs['value']) ) {
@@ -357,6 +496,10 @@ function phpy_post_render_input(&$html, &$attrs) {
   }
 }
 
+
+
+/* <input type="hidden"> */
+
 function phpy_post_render_hidden(&$html, &$attrs, $phpy) {
   if ( $html && !isset($attrs['value']) ) {
     $attrs['value'] = $html;
@@ -373,11 +516,9 @@ function phpy_post_render_hidden(&$html, &$attrs, $phpy) {
   return "<input {$attrs_html}/>";
 }
 
-function phpy_post_render_select(&$html, &$attrs) {
-  if ( isset($attrs['default'][0]) ) {
-    $attrs['name'] = $attrs['default'][0];
-  }
-}
+
+
+/* <input type="file"> */
 
 function phpy_post_render_file(&$html, &$attrs, $phpy) {
   $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'file');
@@ -385,6 +526,10 @@ function phpy_post_render_file(&$html, &$attrs, $phpy) {
   
   return "<input type=\"file\" {$attrs_html}/>";
 }
+
+
+
+/* <input type="checkbox"> */
 
 function phpy_post_render_check(&$html, &$attrs, $phpy) {
   $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'check');
@@ -397,6 +542,76 @@ function phpy_post_render_check(&$html, &$attrs, $phpy) {
   return "<input type=\"checkbox\" {$attrs_html}/>";
 }
 
+
+
+/* <input type="radio"> */
+
+function phpy_post_render_radio(&$html, &$attrs, $phpy) {
+  $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'check');
+  if ( $html || isset($attrs['default'][1]) ) {
+    $attrs['checked'] = 1;
+  }
+  
+  $attrs_html = $phpy->tag_attrs($attrs);
+  
+  return "<input type=\"radio\" {$attrs_html}/>";
+}
+
+
+
+/* <img> */
+
+function phpy_post_render_img(&$html, &$attrs, $phpy) {
+  $attrs['src'] = $html ?: (isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['src']) ? $attrs['src'] : ''));
+  $attrs_html = $phpy->tag_attrs($attrs);
+  
+  return "<img {$attrs_html}/>";
+}
+
+
+
+/* <video> */
+
+function phpy_post_render_video(&$html, &$attrs, $phpy) {
+  if ( !is_array($html) && !isset($attrs['src']) ) {
+    $html = '<source src="' . $html . '">';
+  }
+
+  $attrs_html = $phpy->tag_attrs($attrs);
+  
+  return "<video {$attrs_html}>{$html}</video>";
+}
+
+
+
+/* <iframe> */
+
+function phpy_post_render_iframe(&$html, &$attrs, $phpy) {
+  $attrs['src'] = $html ?: (isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['src']) ? $attrs['src'] : ''));
+  $attrs_html = $phpy->tag_attrs($attrs);
+  
+  return "<iframe {$attrs_html}/>";
+}
+
+
+
+/* <progress> */
+
+function phpy_post_render_progress(&$html, &$attrs, $phpy) {
+  if ( isset($attrs['default'][0]) ) {
+    $attrs['value'] = $attrs['default'][0];
+  }
+  
+  $attrs['max'] = isset($attrs['default'][1]) ? $attrs['default'][1] : 100;
+  $attrs_html = $phpy->tag_attrs($attrs);
+  
+  return "<progress {$attrs_html}>{$html}</progress>";
+}
+
+
+
+/* <textarea> */
+
 function phpy_post_render_textarea(&$html, &$attrs) {
   if ( isset($attrs['default'][0]) ) {
     $attrs['name'] = $attrs['default'][0];
@@ -404,50 +619,5 @@ function phpy_post_render_textarea(&$html, &$attrs) {
 
   if ( isset($attrs['default'][1]) ) {
     $attrs['placeholder'] = $attrs['default'][1];
-  }
-}
-
-function phpy_post_render_form(&$html, &$attrs) {
-  $after_callback = '';
-
-  if ( isset($attrs['default'][1]) ) {
-    $after_callback = ', ' . $attrs['default'][1];
-  }
-
-  if ( isset($attrs['default'][0]) ) {
-    $attrs['action'] = $attrs['default'][0];
-    $attrs['onsubmit'] = 'phpy.apply(this, [\'' . $attrs['action'] . '\', this' . $after_callback . ']); return false;';
-  }
-}
-
-
-
-/* Set of helpful utilities */
-function akey($array, $key, $default = null) {
-  return isset($array[$key]) ? $array[$key] : $default;
-}
-
-function redirect($url) {
-  if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
-    header('Xlocation: ' . $url);
-    exit;
-  }
-  else {
-    header('Location: ' . $url);
-    exit;
-  }
-}
-
-function e($text) {
-  return htmlspecialchars($text);
-}
-
-function nums($namespace = 'default') {
-  static $counters = [];
-  if ( !isset($counters[$namespace]) ) {
-    return $counters[$namespace] = 1;
-  }
-  else {
-    return ++$counters[$namespace];
   }
 }

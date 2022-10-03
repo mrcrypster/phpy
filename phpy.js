@@ -1,4 +1,5 @@
-// Universal com launcher
+/* PHPy [server] component execution & render */
+
 function phpy(com, data, callback) {
   data = data || {};
   if ( typeof data != 'object' ) {
@@ -45,9 +46,7 @@ function phpy(com, data, callback) {
     }
   });
 }
-
-
-// Short query selector & event handlers 
+// Query selector with callback
 function qs(selector, callback) {
   let found = document.querySelectorAll(selector);
 
@@ -58,15 +57,15 @@ function qs(selector, callback) {
   return found;
 }
 
+
+// Attach events using query selector
 function on(selector, event, callback) {
   qs(selector).forEach(function(el) {
     el.addEventListener(event, callback);
   });
 }
+/* Pub/sub component */
 
-
-
-// Pub/sub
 let pubsub = {}
 
 function pub(event, data) {

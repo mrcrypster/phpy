@@ -1,3 +1,129 @@
+/* Basic elements */
+
 body {
   padding: 0; margin: 0; border: 0;
+  font-family:  Arial;
+  font-size: 14px;
+}
+
+a {
+  color: #0074D9;
+}
+
+a:hover {
+  color: #001f3f;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border:  1px solid #ddd;
+  border-spacing: 0;
+  margin: 1em 0;
+  font-size: 1em;
+}
+
+table tr th, table tr td {
+  border:  1px solid #ddd;
+  text-align:  left;
+  padding: .5em;
+}
+
+table tr th {
+  background:  #eee;
+}
+
+p {
+  line-height: 150%;
+}
+
+pre code {
+  display:  block;
+  background: #333;
+  color: #eee;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: .25em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  background: none;
+}
+
+
+
+/* Form elements */
+
+input, select, label {
+  font-size: 1em;
+}
+
+input, select {
+  padding: .5em;
+  outline: none;
+  border: 1px solid #ddd;
+  border-radius: .25em;
+  background: #fff;
+}
+
+input:focus, select:focus {
+  border-color: #ccc;
+}
+
+button, .button {
+  font-size:  1em;
+  background: #444;
+  border-radius: .25em;
+  color:  #fff;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  padding: .5em 1em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+button:active, .button:active {
+  padding: .6em 1em .4em 1em;
+}
+
+
+
+/* Special classes */
+
+.hidden {
+  display: none;
+}
+
+.tag {
+  background: #ddd;
+  font-size:  .8em;
+  padding: 0 .5em;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: .25em;
+}
+
+.tag.bad {
+  background: #85144b;
+  color: #fff;
+}
+
+.tag.good {
+  background: #3D9970;
+  color: #fff;
+}
+
+
+
+/* Content container */
+
+#content {
+  max-width: 900px;
+  margin: 0 auto;
 }
