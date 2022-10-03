@@ -3,23 +3,27 @@
 Component-based PHP markup framework for rapid apps creation.
 
 ## Concepts
-- the less code and dependencies the better
-- you move [small and big] parts of code from place to place frequently
-- organize code based on files, keep each file as small as possible
-- ... work in progress
+- Deliver & test everything fast
+- Change & move code a lot
+- Less code & dependencies = better
+- Folders/files instead of structures to organize code
+- Keep files small
+- Refactor after tests & step-by-step
 
 ## Quick start
-First clone repo into `phpy` dir:
+1. Clone repo into `phpy` dir:
 ```git clone https://github.com/mrcrypster/phpy.git```
 
-Now use:
+2. Init project:
+```
+php phpy.php init
+```
+
+3. Code `default.php` action:
 ```php
-echo phpy(['html' => [
-  ':title' => 'Hi',
-  '#content' => [
-    'p' => 'some text',
-    'a:/page2' => 'some page'
-  ]
+<?php return phpy([
+  'p' => 'some text',
+  'a:/page2' => 'some page'
 ]]);
 ```
 
