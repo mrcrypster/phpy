@@ -11,8 +11,10 @@ Component-based PHP markup framework for rapid apps creation.
 - Refactor after tests & step-by-step
 
 ## Quick start
-1. Clone repo into `phpy` dir:
-```git clone https://github.com/mrcrypster/phpy.git```
+1. Clone repo:
+```bash
+git clone https://github.com/mrcrypster/phpy.git
+```
 
 2. Init project:
 ```
