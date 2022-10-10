@@ -1,4 +1,5 @@
-# PHPy 2
+![PHPy2](https://phpy.dev/img/big-logo.png)
+# [PHPy2](https://phpy.dev/)
 
 PHPy is built for prototyping, focusing on delivering apps to end-users in as little time as possible. Creating prototypes is different from (re)building apps based on known requirements. Prototyping means not only testing ideas, but delivering changes fast in situation of rapid evolution.
 
