@@ -1,13 +1,18 @@
 # PHPy 2
 
-Component-based PHP markup framework for rapid apps creation.
+PHPy is built for prototyping, focusing on delivering apps to end-users in as little time as possible. Creating prototypes is different from (re)building apps based on known requirements. Prototyping means not only testing ideas, but delivering changes fast in situation of rapid evolution.
+
+That's why we rely on the following:
 
 ## Concepts
-- Deliver & test fast.
-- Change & move code a lot.
-- Less code & dependencies = better.
-- Folders/files instead of structures to organize code.
-- Keep files small.
+- Use native language features.
+- Do not use big frameworks & libs.
+- Write less code.
+- Use little or no third-party dependencies.
+- Organize code in files rather than object structures.
+- Change & move code a lot accross app.
+- Keep files small, split big files and nest parts.
+- Do not comment code, but make it self-readable.
 
 ## Quick start
 1. Clone repo:
