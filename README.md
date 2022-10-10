@@ -27,7 +27,7 @@ Now configure your webserver (hopefully Nginx) as will be shown:
 
 ![PHPy2 app init example](https://phpy.dev/img/cli.png)
 
-Then go and create your app fast.
+Then go and develop your prototype app, start from editing `app/layout.php`.
 
 ## Contribute
 This is a repository with prebuilt code.
