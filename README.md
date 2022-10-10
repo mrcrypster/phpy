@@ -1,27 +1,39 @@
-# Phpy 2
+# PHPy 2
 
-Component-based PHP markup framework for rapid apps creation.
+PHPy is built for prototyping, focusing on delivering apps to end-users in as little time as possible. Creating prototypes is different from (re)building apps based on known requirements. Prototyping means not only testing ideas, but delivering changes fast in situation of rapid evolution.
+
+That's why we rely on the following:
 
 ## Concepts
-- the less code and dependencies the better
-- you move [small and big] parts of code from place to place frequently
-- organize code based on files, keep each file as small as possible
-- ... work in progress
+- Use native language features.
+- Do not use big frameworks & libs.
+- Write less code.
+- Use little or no third-party dependencies.
+- Organize code in files rather than object structures.
+- Change & move code a lot accross app.
+- Keep files small, split big files and nest parts.
+- Do not comment code, but make it self-readable.
 
 ## Quick start
-First clone repo into `phpy` dir:
-```git clone https://github.com/mrcrypster/phpy.git```
+1. Clone repo:
+```bash
+git clone https://github.com/mrcrypster/phpy.git
+```
 
-Now use:
+2. Init project:
+```
+php phpy.php init
+```
+
+3. Code `default.php` action:
 ```php
-echo phpy(['html' => [
-  ':title' => 'Hi',
-  '#content' => [
-    'p' => 'some text',
-    'a:/page2' => 'some page'
-  ]
+<?php return phpy([
+  'p' => 'some text',
+  'a:/page2' => 'some page'
 ]]);
 ```
+
+4. [Setup web server](#howto) and open your web app in browser.
 
 ## Contribute
 This is a repository with prebuilt code.
