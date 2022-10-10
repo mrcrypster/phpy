@@ -43,7 +43,7 @@ class phpy {
 
   # Return current endpoint
   public static function endpoint() {
-    return parse_url(isset($_SERVER['REQUEST_URI']) ?: '/')['path'];
+    return parse_url(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/')['path'];
   }
 
   # Publish event to client
@@ -239,6 +239,7 @@ class phpy {
     return [$html, $attrs];
   }
 }
+
 
 
 /* PHPy components */
