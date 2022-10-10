@@ -15,25 +15,16 @@ That's why we rely on the following:
 - Do not comment code, but make it self-readable.
 
 ## Quick start
-1. Clone repo:
+First init new app in the given folder:
 ```bash
 git clone https://github.com/mrcrypster/phpy.git
+cd phpy
+php phpy.php init /path/to/newapp
 ```
 
-2. Init project:
-```
-php phpy.php init
-```
+Now configure your webserver (hopefully Nginx) as will be shown:
 
-3. Code `default.php` action:
-```php
-<?php return phpy([
-  'p' => 'some text',
-  'a:/page2' => 'some page'
-]]);
-```
-
-4. [Setup web server](#howto) and open your web app in browser.
+![PHPy2 app init example](https://phpy.dev/img/cli.png)
 
 ## Contribute
 This is a repository with prebuilt code.
