@@ -1,4 +1,5 @@
-# PHPy 2
+[![PHPy2](https://phpy.dev/img/big-logo.png)](https://phpy.dev/)
+# [PHPy2](https://phpy.dev/)
 
 PHPy is built for prototyping, focusing on delivering apps to end-users in as little time as possible. Creating prototypes is different from (re)building apps based on known requirements. Prototyping means not only testing ideas, but delivering changes fast in situation of rapid evolution.
 
@@ -15,25 +16,18 @@ That's why we rely on the following:
 - Do not comment code, but make it self-readable.
 
 ## Quick start
-1. Clone repo:
+First init new app in the given folder:
 ```bash
 git clone https://github.com/mrcrypster/phpy.git
+cd phpy
+php phpy.php init /path/to/newapp
 ```
 
-2. Init project:
-```
-php phpy.php init
-```
+Now configure your webserver (hopefully Nginx) as will be shown:
 
-3. Code `default.php` action:
-```php
-<?php return phpy([
-  'p' => 'some text',
-  'a:/page2' => 'some page'
-]]);
-```
+![PHPy2 app init example](https://phpy.dev/img/cli.png)
 
-4. [Setup web server](#howto) and open your web app in browser.
+Then go and develop your prototype app, start from editing `app/layout.php`.
 
 ## Contribute
 This is a repository with prebuilt code.
