@@ -391,8 +391,7 @@ function nums($namespace = 'default') {
 function phpy_post_render_html(&$html, &$attrs) {
   $pub_events = [];
   if ( phpy::$events ) foreach ( phpy::$events as $event => $data ) {
-    $json = json_encode($data);
-    $pub_events[] = "pub('{$event}', {$json});";
+    $pub_events[] = "pub(" . json_encode($event) . ", " . json_encode($data) . ");";
   }
 
   return '<html>' .
@@ -672,3 +671,4 @@ function phpy_post_render_textarea(&$html, &$attrs) {
     $attrs['placeholder'] = $attrs['default'][1];
   }
 }
+
