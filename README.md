@@ -1,33 +1,61 @@
-[![PHPy2](https://phpy.dev/img/big-logo.png)](https://phpy.dev/)
+[![PHPy2](https://phpy.dev/img/big-logo.png?1)](https://phpy.dev/)
 # [PHPy2](https://phpy.dev/)
 
-PHPy is built for prototyping, focusing on delivering apps to end-users in as little time as possible. Creating prototypes is different from (re)building apps based on known requirements. Prototyping means not only testing ideas, but delivering changes fast in situation of rapid evolution.
+PHPy is built for prototyping web apps, focusing on delivering apps to end-users in as little time as possible. Creating prototypes is different from (re)building apps based on known requirements. Prototyping means not only testing ideas, but delivering changes fast in situation of rapid evolution.
 
-That's why we rely on the following:
+```php
+<?php return [
+  'h1' => 'Hi',
+  'p.text' => 'This is paragraph',
+  
+  'ul#list' => [
+    ['li' => 'First item'],
+    ['li' => 'Second item']
+  ],
+  
+   'form:/signup' => [
+    'input:email' => 'test@example.com',
+    
+    
+    'select:type' => [
+      1 => 'Personal',
+      2 => 'Business'
+    ],
+    
+    'submit' => 'Sign up',
+  ],
+  
+  'a:/home' => ['Return home', ':rel' => 'nofollow']
+];
+```
 
 ## Concepts
 - Use native language features.
 - Do not use big frameworks & libs.
-- Write less code.
+- The less code the better.
 - Use little or no third-party dependencies.
-- Organize code in files rather than object structures.
-- Change & move code a lot accross app.
-- Keep files small, split big files and nest parts.
-- Do not comment code, but make it self-readable.
+- Organize endpoints based on files.
+- Move code a lot accross app.
+- Keep files small, split and nest big files.
+- Self-explanatory code instead of comments.
+
+## Features
+- PHP-based markup.
+- File based actions router.
+- Simplified syntax for most HTML elements.
+- Nest actions inside other actions.
+- Render directly to DOM elements from JS.
+- Create custom markup elements.
+- Client-server Pub/sub queue
+- Custom endpoints handlers
+
 
 ## Quick start
-First init new app in the given folder:
 ```bash
 git clone https://github.com/mrcrypster/phpy.git
-cd phpy
-php phpy.php init /path/to/newapp
+php phpy/phpy.php init /path/to/newapp
 ```
-
-Now configure your webserver (hopefully Nginx) as will be shown:
-
-![PHPy2 app init example](https://phpy.dev/img/cli.png)
-
-Then go and develop your prototype app, start from editing `app/layout.php`.
+And continue with the <a href="https://phpy.dev//guide">Building Web App Guide</a> or <a href="https://phpy.dev//docs">PHPy Reference</a>.
 
 ## Contribute
 This is a repository with prebuilt code.
