@@ -55,7 +55,7 @@ PHPy is built for prototyping web apps, focusing on delivering apps to end-users
 git clone https://github.com/mrcrypster/phpy.git
 php phpy/phpy.php init /path/to/newapp
 ```
-And continue with the <a href="https://phpy.dev//guide">Building Web App Guide</a> or <a href="https://phpy.dev//docs">PHPy Reference</a>.
+And continue with the <a href="https://phpy.dev/guide">Building Web App Guide</a> or <a href="https://phpy.dev/docs">PHPy Reference</a>.
 
 ## Contribute
 This is a repository with prebuilt code.
