@@ -10,14 +10,16 @@ if ( php_sapi_name() == "cli" ) {
 
     file_put_contents(
       $dir . '/web/index.php',
-      '' . "\n\n" .
-      'require_once ' . __FILE__ . ';' . "\n" .
+      '<' . '?php' . "\n\n" .
+      'phpy::on(\'/css.css\', fn() => phpy::css());' . "\n" .
+      'phpy::on(\'/js.js\', fn() => phpy::js());' . "\n\n" .
+      'require_once \'' . __FILE__ . '\';' . "\n" .
       'echo phpy([\'/\' => __DIR__]);' . "\n"
     );
 
     file_put_contents(
       $dir . '/app/layout.php',
-      ' return [\'html\' => [' . "\n" .
+      '<' . '?php return [\'html\' => [' . "\n" .
       '  \':v\' => 1,' . "\n" .
       '  \':title\' => \'PHPy2 App\',' . "\n" .
       '  \'div\' => phpy()' . "\n" .
@@ -26,7 +28,7 @@ if ( php_sapi_name() == "cli" ) {
 
     file_put_contents(
       $dir . '/app/default.php',
-      ' return [\'h1\' => \'I am the PHPy2 app\'];'
+      '<' . '?php return [\'h1\' => \'I am the PHPy2 app\'];'
     );
 
     echo "\n";
@@ -48,6 +50,7 @@ if ( php_sapi_name() == "cli" ) {
     echo "\n" . '------' . "\n\n";
   }
 }
+
 
 
 /* Core engine */
@@ -287,6 +290,32 @@ class phpy {
     }
 
     return [$html, $attrs];
+  }
+
+
+
+  /* Default routing handlers */
+  protected static function collect($dir, $exts) {
+    $c = '';
+
+    foreach (glob($dir . '/*') as $f ) {
+      if ( is_dir($f) ) $c .= self::collect($f, $exts);
+      else if ( in_array(pathinfo($f, PATHINFO_EXTENSION), $exts) ) $c .= "\n" . file_get_contents($f);
+    }
+
+    return $c;
+  }
+
+  public static function css() {
+    header('Content-type: text/css');
+    $js = file_get_contents(__DIR__ . '/phpy.css') . self::collect((self::instance()->get('/') . '/../app'), ['css']);
+    echo $js;
+  }
+
+  public static function js() {
+    header('Content-type: application/javascript');
+    $js = file_get_contents(__DIR__ . '/phpy.js') . self::collect((self::instance()->get('/') . '/../app'), ['js']);
+    echo $js;
   }
 }
 
