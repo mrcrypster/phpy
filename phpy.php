@@ -295,7 +295,7 @@ class phpy {
 
 
   /* Default routing handlers */
-  protected static function collect($dir, $exts) {
+  public static function collect($dir, $exts) {
     $c = '';
 
     foreach (glob($dir . '/*') as $f ) {
