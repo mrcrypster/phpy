@@ -5,7 +5,7 @@ if ( php_sapi_name() == "cli" ) {
     $dir = isset($argv[2]) ? $argv[2] : getcwd();
 
     foreach ( ['/web', '/app'] as $d ) {
-      mkdir($dir . $d) ? print "Created {$dir}{$d} dir\n" : die("Failed to create {$dir}{$d} \n");
+      mkdir($dir . $d, 0755, true) ? print "Created {$dir}{$d} dir\n" : die("Failed to create {$dir}{$d} \n");
     }
 
     file_put_contents(
@@ -109,7 +109,7 @@ class phpy {
   # application launcher
   public function app() {
     foreach ( self::$listeners as $pattern => $handlers ) {
-      if ( ($pattern == $this->endpoint()) || preg_match($pattern, $this->endpoint()) ) {
+      if ( ($pattern == $this->endpoint()) || @preg_match($pattern, $this->endpoint()) ) {
         foreach ( $handlers as $cb ) {
           $continue = $cb($this);
         }
