@@ -627,7 +627,8 @@ function phpy_post_render_check(&$html, &$attrs, $phpy) {
 
 function phpy_post_render_radio(&$html, &$attrs, $phpy) {
   $attrs['name'] = isset($attrs['default'][0]) ? $attrs['default'][0] : (isset($attrs['name']) ? $attrs['name'] : 'check');
-  if ( $html || isset($attrs['default'][1]) ) {
+  $attrs['value'] = (isset($attrs['value']) ? $attrs['value'] : $html);
+  if ( isset($attrs['default'][1]) && $attrs['default'][1] ) {
     $attrs['checked'] = 1;
   }
   
