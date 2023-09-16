@@ -4,14 +4,21 @@ if ( php_sapi_name() == "cli" ) {
   if ( isset($argv[1]) && $argv[1] == 'init' ) {
     $dir = isset($argv[2]) ? $argv[2] : getcwd();
 
-    foreach ( ['/web', '/app'] as $d ) {
+    foreach ( ['/web', '/app', '/lib'] as $d ) {
       mkdir($dir . $d, 0755, true) ? print "Created {$dir}{$d} dir\n" : die("Failed to create {$dir}{$d} \n");
     }
 
     file_put_contents(
-      $dir . '/web/index.php',
+      $dir . '/boot.php',
       '<' . '?php' . "\n\n" .
       'require_once \'' . __FILE__ . '\';' . "\n" .
+      'require_once __DIR__ . \'/lib/helpers.php\';' . "\n"
+    );
+
+    file_put_contents(
+      $dir . '/web/index.php',
+      '<' . '?php' . "\n\n" .
+      'require_once __DIR__ . \'/../boot.php\';' . "\n" .
       'phpy::on(\'/css.css\', fn() => phpy::css());' . "\n" .
       'phpy::on(\'/js.js\', fn() => phpy::js());' . "\n\n" .
       'echo phpy([\'/\' => __DIR__]);' . "\n"
@@ -22,7 +29,7 @@ if ( php_sapi_name() == "cli" ) {
       '<' . '?php return [\'html\' => [' . "\n" .
       '  \':v\' => 1,' . "\n" .
       '  \':title\' => \'PHPy2 App\',' . "\n" .
-      '  \'div\' => phpy()' . "\n" .
+      '  \'div#content\' => phpy()' . "\n" .
       ']];'
     );
 
@@ -411,6 +418,14 @@ function nums($namespace = 'default') {
   else {
     return ++$counters[$namespace];
   }
+}
+
+# generate url with query string based on current url
+function url($params = [], $path = null) {
+  $url = parse_url($_SERVER['REQUEST_URI']);
+  parse_str($url['query'], $q);
+  $query = http_build_query(array_merge($q?:[], $params));
+  return ($path ?: $url['path']) . ($query ? '?' : '') . $query;
 }
 
 
