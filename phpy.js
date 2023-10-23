@@ -15,7 +15,7 @@ function phpy(com, data, callback) {
   if ( data instanceof HTMLFormElement ) {
     data = new FormData(data);
   }
-  else {
+  else if ( !(data instanceof FormData) ) { {
     data = new URLSearchParams(data);
   }
   
