@@ -38,6 +38,11 @@ if ( php_sapi_name() == "cli" ) {
       '<' . '?php return [\'h1\' => \'I am the PHPy2 app\'];'
     );
 
+    file_put_contents(
+      $dir . '/lib/helpers.php',
+      '<' . '?php'
+    );
+
     echo "\n";
     echo 'App files created, configure your Nginx now:' . "\n\n";
     echo '------' . "\n";
