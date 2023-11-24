@@ -15,7 +15,7 @@ function phpy(com, data, callback) {
   if ( data instanceof HTMLFormElement ) {
     data = new FormData(data);
   }
-  else if ( !(data instanceof FormData) ) { {
+  else if ( !(data instanceof FormData) ) {
     data = new URLSearchParams(data);
   }
   
@@ -46,6 +46,7 @@ function phpy(com, data, callback) {
     }
   });
 }
+
 // Query selector with callback
 function qs(selector, callback) {
   let found = document.querySelectorAll(selector);

@@ -1,129 +1,540 @@
-/* Basic elements */
-
 body {
-  padding: 0; margin: 0; border: 0;
-  font-family:  Arial;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  font-family: Arial;
   font-size: 14px;
 }
-
+.content {
+  display: block;
+  padding: 20px;
+}
+.columns,
+.cols {
+  width: 100%;
+  display: table;
+}
+.columns > div,
+.cols > div {
+  display: table-cell;
+  padding-left: 20px;
+}
+.columns > div:first-child,
+.cols > div:first-child {
+  padding-left: 0;
+}
+ol {
+  counter-reset: item;
+}
+ol li:before {
+  position: absolute;
+  left: -20px;
+  top: 1px;
+  content: counter(item) ". ";
+  counter-increment: item;
+  color: #aaa;
+  font-size: 12px;
+}
+ul li:before {
+  position: absolute;
+  left: -20px;
+  top: 1px;
+  content: "—";
+  color: #ccc;
+  font-size: 12px;
+}
+ul,
+ol {
+  padding: 0 0 0 20px;
+  margin: 0;
+  list-style: none;
+  font-size: 14px;
+}
+ul.e,
+ol.e {
+  padding: 0;
+  list-style: none;
+}
+ul.e li:before,
+ol.e li:before {
+  content: '';
+}
+ul li,
+ol li {
+  margin: 0 0 10px 0;
+  position: relative;
+  line-height: 150%;
+}
+ul li:last-child,
+ol li:last-child {
+  margin-bottom: 0;
+}
+ul.ii li,
+ol.ii li {
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+.dashboard {
+  display: table;
+  width: 100%;
+}
+.dashboard .plate {
+  display: table-cell;
+}
+.dashboard .plate div {
+  background: #222;
+  color: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  margin: 20px 0 20px 20px;
+}
+.dashboard .plate div b {
+  font-size: 42px;
+  display: block;
+  margin: 0 0 40px 0;
+  font-family: Georgia;
+  line-height: 100%;
+}
+.dashboard .plate div i {
+  font-style: normal;
+  display: block;
+  font-size: 12px;
+  text-align: right;
+  opacity: 0.66;
+}
+.dashboard .plate.ok div {
+  background: #2ECC40;
+  color: #ffffffcc;
+}
+.dashboard .plate.working div {
+  background: #2ECC40;
+  color: #ffffffcc;
+}
+.dashboard .plate.error div {
+  background: #FF4136;
+  color: #ffffffcc;
+}
+.dashboard .plate.notice div {
+  background: #FFDC00;
+  color: #00000088;
+}
+.dashboard .plate.warning div {
+  background: #FF851B;
+  color: #ffffffcc;
+}
+.dashboard .plate.info div,
+.dashboard .plate.new div,
+.dashboard .plate.pending div {
+  background: #39CCCC;
+  color: #00000088;
+}
+.dashboard .plate.special div {
+  background: #B10DC9;
+  color: #ffffffcc;
+}
+.dashboard .plate.action div,
+.dashboard .plate.processing div {
+  background: #0074D9;
+  color: #ffffffcc;
+}
+.dashboard .plate:last-child div {
+  margin-right: 20px;
+}
+.dashboard + .dashboard .plate div {
+  margin-top: 0;
+}
+button,
+.button {
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 150%;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 5px;
+  background: #333;
+  color: #eee;
+  opacity: 0.9;
+  margin: 0 20px 0 0;
+}
+button.ok,
+.button.ok {
+  background: #2ECC40;
+  color: #ffffffcc;
+}
+button.working,
+.button.working {
+  background: #2ECC40;
+  color: #ffffffcc;
+}
+button.error,
+.button.error {
+  background: #FF4136;
+  color: #ffffffcc;
+}
+button.notice,
+.button.notice {
+  background: #FFDC00;
+  color: #00000088;
+}
+button.warning,
+.button.warning {
+  background: #FF851B;
+  color: #ffffffcc;
+}
+button.info,
+.button.info,
+button.new,
+.button.new,
+button.pending,
+.button.pending {
+  background: #39CCCC;
+  color: #00000088;
+}
+button.special,
+.button.special {
+  background: #B10DC9;
+  color: #ffffffcc;
+}
+button.action,
+.button.action,
+button.processing,
+.button.processing {
+  background: #0074D9;
+  color: #ffffffcc;
+}
+button:hover,
+.button:hover {
+  opacity: 1;
+  cursor: pointer;
+  color: #fff;
+}
+button:active,
+.button:active {
+  padding-top: 12px;
+  padding-bottom: 10px;
+}
+button.mini,
+.button.mini {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 4px;
+}
+button.mini:active,
+.button.mini:active {
+  padding-top: 6px;
+  padding-bottom: 4px;
+}
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  line-height: 150%;
+  outline: none;
+  width: 300px;
+  box-sizing: border-box;
+  background: #fff;
+  font-size: 14px;
+  font-family: Arial;
+}
+input:not([type="checkbox"]):not([type="radio"]):hover,
+textarea:hover,
+select:hover {
+  border-color: #ddd;
+}
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+select:focus {
+  border-color: #ccc;
+  background-color: #fcfcfc;
+}
+input:not([type="checkbox"]):not([type="radio"]).mini,
+textarea.mini,
+select.mini {
+  width: 100px;
+}
+textarea {
+  width: 100%;
+  min-height: 120px;
+}
+select {
+  appearance: none;
+  position: relative;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='10px' width='15px'%3E%3Ctext x='0' y='10' fill='silver'%3E%E2%96%BE%3C/text%3E%3C/svg%3E");
+  background-position: right center;
+  background-repeat: no-repeat;
+}
+form {
+  display: block;
+  margin: 0 0 20px 0;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 5px;
+}
+form fieldset {
+  display: block;
+  margin: 0 0 20px 0;
+  padding: 0;
+  border: none;
+  position: relative;
+  padding-top: 7px;
+}
+form fieldset label {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 20px 0 0;
+  opacity: 0.9;
+  color: #444;
+}
+form fieldset label:hover {
+  opacity: 1;
+  color: #000;
+}
+form fieldset label input[type="checkbox"],
+form fieldset label input[type="radio"] {
+  margin: 0 5px 0 0;
+  vertical-align: middle;
+}
+form fieldset legend {
+  background: #f6f6f6;
+  position: absolute;
+  top: 1px;
+  left: 10px;
+  padding: 0 2px;
+  font-size: 12px;
+  color: #666;
+  border-radius: 3px;
+}
+form.l {
+  text-align: center;
+}
+form.l > * {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 20px 0 0;
+}
+form.l fieldset {
+  padding-top: 0;
+}
+form.l fieldset legend {
+  top: -6px;
+}
+nav {
+  background: #222;
+  display: block;
+}
+nav a {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 20px;
+  color: #7FDBFFcc;
+  position: relative;
+}
+nav a:hover {
+  color: #7FDBFF;
+}
+nav a.on {
+  background: #2a2a2a;
+  pointer-events: none;
+  color: #eee;
+  text-decoration: none;
+}
+nav a sup {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 9px;
+  background: #FF4136;
+  color: #fff;
+  padding: 2px 3px;
+  border-radius: 5px;
+  border-bottom-left-radius: 0;
+  opacity: 0.75;
+}
+.i {
+  display: inline-block;
+}
+.h {
+  display: none;
+}
+.b {
+  display: block;
+}
+.md {
+  color: #aaa;
+  font-weight: normal;
+  margin: 0 10px;
+}
+.md:after {
+  content: '···';
+}
+table {
+  border-collapse: collapse;
+  border: none;
+  border-spacing: 0;
+  margin: 0;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 14px;
+}
+table tbody {
+  border-radius: 5px;
+}
+table tr td,
+table tr th {
+  border: 1px solid #eee;
+  text-align: left;
+  padding: 10px;
+}
+table tr td:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+table tr td:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+table tr td.r {
+  text-align: right;
+}
+table tr td.c {
+  text-align: center;
+}
+table tr th {
+  background: #333;
+  border-color: transparent;
+  color: #eee;
+  text-align: left;
+}
+table tr th:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+table tr th:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+table tr:hover td {
+  background: #fafafa;
+}
 a {
   color: #0074D9;
 }
-
+a.j {
+  text-decoration: none;
+  border-bottom: 1px dotted #0074D9;
+}
 a:hover {
   color: #001f3f;
 }
-
-ol, ul {
-  list-style: none;
+a:hover.j {
+  border-color: #001f3f;
 }
-
-table {
-  border-collapse: collapse;
-  border:  1px solid #ddd;
-  border-spacing: 0;
-  margin: 1em 0;
-  font-size: 1em;
+h1 {
+  margin: 0 0 10px 0;
+  font-weight: normal;
+  font-size: 42px;
 }
-
-table tr th, table tr td {
-  border:  1px solid #ddd;
-  text-align:  left;
-  padding: .5em;
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 20px 0;
+  font-weight: normal;
 }
-
-table tr th {
-  background:  #eee;
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child {
+  margin-top: 0;
 }
-
+h2 {
+  font-size: 32px;
+  color: #222;
+}
+h3 {
+  font-size: 24px;
+  color: #444;
+}
+h4 {
+  font-size: 18px;
+  color: #666;
+}
+h5 {
+  font-size: 16px;
+  color: #888;
+}
+h6 {
+  font-size: 14px;
+  color: #aaa;
+}
 p {
+  margin: 0 0 20px 0;
+  line-height: 150%;
+  font-size: 14px;
+}
+code {
+  background: #f6f6f6;
+  display: inline-block;
+  color: #001f3faa;
+  font-family: monospace;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+pre code {
+  display: block;
+  padding: 20px;
   line-height: 150%;
 }
-
-pre code {
-  display:  block;
-  background: #333;
-  color: #eee;
-  padding: 1em;
-  margin: 1em 0;
-  border-radius: .25em;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  background: none;
-}
-
-
-
-/* Form elements */
-
-input, select, label {
-  font-size: 1em;
-}
-
-input, select {
-  padding: .5em;
-  outline: none;
-  border: 1px solid #ddd;
-  border-radius: .25em;
-  background: #fff;
-}
-
-input:focus, select:focus {
-  border-color: #ccc;
-}
-
-button, .button {
-  font-size:  1em;
-  background: #444;
-  border-radius: .25em;
-  color:  #fff;
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  padding: .5em 1em;
+.t {
   display: inline-block;
-  vertical-align: middle;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background: #eee;
+  color: #888;
+  font-style: normal;
+  margin: 0 10px 0 0;
+  font-size: 12px;
+}
+.t.ok {
+  background: #2ECC40;
+  color: #ffffffcc;
+}
+.t.working {
+  background: #2ECC40;
+  color: #ffffffcc;
+}
+.t.error {
+  background: #FF4136;
+  color: #ffffffcc;
+}
+.t.notice {
+  background: #FFDC00;
+  color: #00000088;
+}
+.t.warning {
+  background: #FF851B;
+  color: #ffffffcc;
+}
+.t.info,
+.t.new,
+.t.pending {
+  background: #39CCCC;
+  color: #00000088;
+}
+.t.special {
+  background: #B10DC9;
+  color: #ffffffcc;
+}
+.t.action,
+.t.processing {
+  background: #0074D9;
+  color: #ffffffcc;
 }
 
-button:active, .button:active {
-  padding: .6em 1em .4em 1em;
-}
-
-
-
-/* Special classes */
-
-.hidden {
-  display: none;
-}
-
-.tag {
-  background: #ddd;
-  font-size:  .8em;
-  padding: 0 .5em;
-  display: inline-block;
-  vertical-align: middle;
-  border-radius: .25em;
-}
-
-.tag.bad {
-  background: #85144b;
-  color: #fff;
-}
-
-.tag.good {
-  background: #3D9970;
-  color: #fff;
-}
-
-
-
-/* Content container */
-
-#content {
-  max-width: 900px;
-  margin: 0 auto;
-}
