@@ -48,6 +48,7 @@ PHPy is built for prototyping web apps, focusing on delivering apps to end-users
 - Create custom markup elements.
 - Client-server Pub/sub queue
 - Custom endpoints handlers
+- Integrated [boilerplate CSS](https://github.com/mrcrypster/cssy-src/tree/main)
 
 
 ## Quick start
