@@ -1,5 +1,4 @@
-[![PHPy2](https://phpy.dev/img/big-logo.png?1)](https://phpy.dev/)
-# [PHPy2](https://phpy.dev/)
+# PHPy2
 
 PHPy is built for prototyping web apps, focusing on delivering apps to end-users in as little time as possible. Creating prototypes is different from (re)building apps based on known requirements. Prototyping means not only testing ideas, but delivering changes fast in situation of rapid evolution.
 
